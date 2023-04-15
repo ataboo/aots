@@ -1,0 +1,19 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Attack of the Snail", "Attack of the Snail.csproj", "{3AD2FA6E-8E2E-411F-8D3E-CD919D305AFB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3AD2FA6E-8E2E-411F-8D3E-CD919D305AFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AD2FA6E-8E2E-411F-8D3E-CD919D305AFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AD2FA6E-8E2E-411F-8D3E-CD919D305AFB}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{3AD2FA6E-8E2E-411F-8D3E-CD919D305AFB}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{3AD2FA6E-8E2E-411F-8D3E-CD919D305AFB}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{3AD2FA6E-8E2E-411F-8D3E-CD919D305AFB}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal

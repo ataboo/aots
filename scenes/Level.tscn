@@ -1,0 +1,75 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://textures/tiles/LevelTilemap.tres" type="TileSet" id=1]
+[ext_resource path="res://textures/characters/snail_still.png" type="Texture" id=2]
+[ext_resource path="res://src/level/CameraControl.cs" type="Script" id=3]
+[ext_resource path="res://src/level/SnailControl.cs" type="Script" id=4]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 20.2237
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 2.25, 15 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 10.5, 3 )
+
+[node name="Level" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+script = ExtResource( 3 )
+targetPath = NodePath("../Snail")
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = ExtResource( 1 )
+collision_layer = 3
+collision_mask = 3
+format = 1
+tile_data = PoolIntArray( -458757, 0, 0, -458756, 0, 0, -458755, 0, 0, -458754, 0, 0, -458753, 0, 0, -524288, 0, 0, -524287, 0, 0, -524286, 0, 0, -524285, 0, 0, -524284, 0, 0, -524283, 0, 0, -524282, 0, 0, -524281, 0, 0, -524280, 0, 0, -393221, 0, 0, -393220, 0, 65544, -458745, 0, 65543, -458744, 0, 0, -327685, 0, 0, -393208, 0, 0, -262149, 0, 0, -327672, 0, 0, -327668, 0, 1, -327667, 0, 2, -327666, 0, 3, -196613, 0, 0, -262144, 0, 5, -262143, 0, 6, -262142, 0, 6, -262141, 0, 7, -262136, 0, 0, -131077, 0, 0, -196600, 0, 0, -196596, 0, 2, -196595, 0, 2, -196594, 0, 2, -196593, 0, 65538, -65541, 0, 0, -131067, 0, 65537, -131066, 0, 2, -131065, 0, 6, -131064, 0, 131073, -5, 0, 0, -4, 0, 131078, -3, 0, 131078, -2, 0, 131078, -1, 0, 65540, -65532, 0, 65537, -65531, 0, 131073, -65530, 0, 0, 65531, 0, 0, 65532, 0, 0, 65533, 0, 0, 65534, 0, 0, 65535, 0, 131074, 0, 0, 2, 1, 0, 2, 2, 0, 2, 3, 0, 2, 4, 0, 131073, 5, 0, 0, 6, 0, 0, 131068, 0, 0, 131069, 0, 0, 131070, 0, 0, 131071, 0, 0, 65536, 0, 0, 65537, 0, 0, 65538, 0, 0, 65539, 0, 0, 65540, 0, 0, 65541, 0, 0, 65542, 0, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Snail" type="KinematicBody2D" parent="."]
+position = Vector2( 37, -21 )
+script = ExtResource( 4 )
+rightWallDetectorPath = NodePath("RightWallDetector")
+leftWallDetectorPath = NodePath("LeftWallDetector2")
+snailSpritePath = NodePath("SnailSprite")
+speed = 120.0
+jumpSpeed = 300.0
+gravity = 200.0
+wallStick = 200.0
+
+[node name="SnailCol" type="CollisionShape2D" parent="Snail"]
+shape = SubResource( 1 )
+
+[node name="SnailSprite" type="Sprite" parent="Snail"]
+texture = ExtResource( 2 )
+centered = false
+offset = Vector2( -29.716, -40.55 )
+
+[node name="RightWallDetector" type="Area2D" parent="Snail"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Snail/RightWallDetector"]
+position = Vector2( 20, 0 )
+shape = SubResource( 2 )
+
+[node name="LeftWallDetector2" type="Area2D" parent="Snail"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Snail/LeftWallDetector2"]
+position = Vector2( -20, 0 )
+shape = SubResource( 2 )
+
+[node name="LeftWallDetector3" type="Area2D" parent="Snail"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Snail/LeftWallDetector3"]
+position = Vector2( -0.5, 20 )
+shape = SubResource( 3 )
