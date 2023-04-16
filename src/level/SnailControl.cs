@@ -15,24 +15,19 @@ public class SnailControl : KinematicBody2D
 
     [Export]
     public NodePath snailSpritePath;
-    private Sprite _snailSprite;
-
-    private bool _onFloor;
-    private bool _leftWallInRange = false;
-    private bool _rightWallInRange = false;
-
-    private bool _onWall;
-
-    private Vector2? _floorNormal = null;
+    private SnailSpriteControl _snailSprite;
 
     [Export]
-    public float speed = 1200f;
+    public float speed = 120f;
 
     [Export]
-    public float jumpSpeed = 1800f;
+    public float floatVelocity = 80f;
 
     [Export]
-    public float gravity = 4000f;
+    public float floatAccel = 0.1f;
+
+    [Export]
+    public float gravity = 200f;
 
     [Export(PropertyHint.Range, "0.0,1.0")]
     public float friction = 0.1f;
@@ -41,116 +36,132 @@ public class SnailControl : KinematicBody2D
     public float accel = 0.25f;
 
     [Export]
-    public float wallStick = 1f;
+    public float wallStick = 200f;
 
-    private Vector2 velocity = Vector2.Zero;
+    [Export]
+    public float floatCapacity = 1.2f;
 
+    [Export]
+    public float floatRechargeFactor = 0.75f;
 
-    private Vector2 _inputAxes;
+    private SnailState _state = new SnailState();
+
+    public SnailState SnailState => _state;
+
+    private Vector2 _startPosition;
 
     public override void _Ready()
     {
-        _snailSprite = GetNode<Sprite>(snailSpritePath) ?? throw new NullReferenceException();
+        _snailSprite = GetNode<SnailSpriteControl>(snailSpritePath) ?? throw new NullReferenceException();
         _rightWallDetector = GetNode<Area2D>(rightWallDetectorPath) ?? throw new NullReferenceException();
         _leftWallDetector = GetNode<Area2D>(leftWallDetectorPath) ?? throw new NullReferenceException();
+
+        _startPosition = Position;
+
+        InitState();
     }
 
-    public override void _UnhandledInput(InputEvent @event)
-    {
-        
+    private void InitState() {
+        _state = new SnailState() {
+            floating = false,
+            floatInput = false,
+            floatTime = 0f,
+            floorNormal = null,
+            input = Vector2.Zero,
+            lastDirection = 0,
+            leftWallInRange = false,
+            maxFloatTime = floatCapacity,
+            onFloor = false,
+            onWall = false,
+            rightWallInRange = false,
+            velocity = Vector2.Zero
+        };
     }
 
     public override void _PhysicsProcess(float delta)
     {
-        _inputAxes = Vector2.Zero;
+        _state.input = Vector2.Zero;
         if(Input.IsActionPressed("move_right")) {
-            _inputAxes += Vector2.Right;
+            _state.input += Vector2.Right;
         }
         if(Input.IsActionPressed("move_left")) {
-            _inputAxes += Vector2.Left;
+            _state.input += Vector2.Left;
         }
         if(Input.IsActionPressed("move_up")) {
-            _inputAxes += Vector2.Up;
+            _state.input += Vector2.Up;
         }
         if(Input.IsActionPressed("move_down")) {
-            _inputAxes += Vector2.Down;
+            _state.input += Vector2.Down;
         }
+        _state.floatInput = Input.IsActionPressed("jump");
 
-        // var justJumped = Input.IsActionJustPressed("jump") && this._onFloor || this._onWall;
+        if(_state.floatInput) {
+            _state.floatTime -= delta;
+        } else if(_state.onFloor || _state.onWall) {
+            _state.floatTime += delta * floatRechargeFactor;
+        }
+        _state.floatTime = Mathf.Clamp(_state.floatTime, 0, floatCapacity);
 
-        if(_inputAxes.x != 0) {
-            velocity.x = Mathf.Lerp(velocity.x, _inputAxes.x * speed, accel);
+        _state.floating = _state.floatInput && _state.floatTime > 0;
+
+        if(_state.input.x != 0) {
+            _state.velocity.x = Mathf.Lerp(_state.velocity.x, _state.input.x * speed, accel);
         } else {
-            velocity.x = Mathf.Lerp(velocity.x, 0, friction);
+            _state.velocity.x = Mathf.Lerp(_state.velocity.x, 0, friction);
         }
 
-        if(!_onFloor && !_onWall) {
-            velocity.y += gravity * delta;
-        }
-
-        if(_onWall) {
-            if(_inputAxes.y != 0) {
-                velocity.y = Mathf.Lerp(velocity.y, _inputAxes.y * speed, accel);
-            } else {
-                velocity.y = Mathf.Lerp(velocity.y, 0, friction);
+        if(_state.floating) {
+            _state.velocity.y = Mathf.Lerp(_state.velocity.y, -floatVelocity, floatAccel);
+        } else {
+            if(!_state.onFloor && !_state.onWall) {
+                _state.velocity.y += gravity * delta;
             }
 
-            if(_floorNormal != null) {
-                if(((Vector2)_floorNormal).x != _inputAxes.x) {
-                    velocity -= (Vector2)_floorNormal * wallStick;
+            if(_state.onWall) {
+                if(_state.input.y != 0) {
+                    _state.velocity.y = Mathf.Lerp(_state.velocity.y, _state.input.y * speed, accel);
+                } else {
+                    _state.velocity.y = Mathf.Lerp(_state.velocity.y, 0, friction);
+                }
+            }
+            if(_state.onWall || _state.onFloor) {
+                if(((Vector2)_state.floorNormal).x != _state.input.x) {
+                    _state.velocity -= (Vector2)_state.floorNormal * wallStick;
                 }
             }
         }
 
-        velocity = MoveAndSlide(velocity, Vector2.Up, stopOnSlope: true);
         
-        _floorNormal = GetLastSlideCollision()?.Normal;
-        if(_floorNormal != null && ((Vector2)_floorNormal).y > 0) {
-            _floorNormal = null;
+        _state.velocity = MoveAndSlide(_state.velocity, Vector2.Up, stopOnSlope: true);
+
+        if(CollidedWithHazard()) {
+            RestartLevel();
         }
-        _onFloor = _floorNormal != null && ((Vector2)_floorNormal).y < -0.2f;
-        _onWall = _floorNormal != null && !_onFloor;
+        
+        _state.floorNormal = GetLastSlideCollision()?.Normal;
+        if(_state.floorNormal != null && ((Vector2)_state.floorNormal).y > 0) {
+            _state.floorNormal = null;
+        }
+        _state.onFloor = _state.floorNormal != null && ((Vector2)_state.floorNormal).y < -0.2f;
+        _state.onWall = _state.floorNormal != null && !_state.onFloor;
 
-        _leftWallInRange = _leftWallDetector.GetOverlappingBodies().Count > 0;
-        _rightWallInRange = _rightWallDetector.GetOverlappingBodies().Count > 0;
+        _state.leftWallInRange = _leftWallDetector.GetOverlappingBodies().Count > 0;
+        _state.rightWallInRange = _rightWallDetector.GetOverlappingBodies().Count > 0;
 
-        UpdateSnailSprite(_inputAxes);
+        _snailSprite.UpdateSnailSprite(_state);
     }
 
-    private void UpdateSnailSprite(Vector2 input) {
-
-        var roundedPos = new Vector2(Mathf.Round(Position.x), Mathf.Round(Position.y));
-        
-        _snailSprite.Position = roundedPos - Position;
-
-        if(_onFloor || _onWall) {
-            if(_onWall) {
-                if(input.y < 0) {
-                    _snailSprite.FlipH = _leftWallInRange;
-                } else if(input.y > 0) {
-                    _snailSprite.FlipH = !_leftWallInRange;
-                }
-            } else {
-                if(input.x > 0) {
-                    _snailSprite.FlipH = false;
-                } else if(input.x < 0) {
-                    _snailSprite.FlipH = true;
-                }
-            }
-
-            _snailSprite.Rotation = ((Vector2)_floorNormal).Angle() + Mathf.Pi / 2;
-        } else {
-            if(velocity.x > 0) {
-                _snailSprite.FlipH = false;
-                _snailSprite.Rotation = new Vector2(velocity.x, velocity.y).Angle();
-            } else if(velocity.x < 0) {
-                _snailSprite.FlipH = true;
-                _snailSprite.Rotation = new Vector2(velocity.x, velocity.y).Angle() + Mathf.Pi;
-            } else {
-                // _snailSprite.Rotation = 0;
-            }
+    private bool CollidedWithHazard() {
+        var col = GetLastSlideCollision();
+        if(col?.Collider is TileMapControl tileMap) {
+            return tileMap.PositionIsSpike(col.Position);
         }
+        
+        return false;
+    }
 
-
+    private void RestartLevel() {
+        Position = _startPosition;
+        InitState();
     }
 }

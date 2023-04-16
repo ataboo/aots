@@ -10,6 +10,7 @@ public class CameraControl : Camera2D
     public override void _Ready()
     {
         _target = GetNode<Node2D>(targetPath) ?? throw new NullReferenceException();
+        Position = _target.Position;
     }
 
     public override void _PhysicsProcess(float delta)
