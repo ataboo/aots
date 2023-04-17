@@ -1,0 +1,46 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://src/level/SnailSpriteControl.cs" type="Script" id=1]
+[ext_resource path="res://textures/hats/pilgrim_45.png" type="Texture" id=2]
+[ext_resource path="res://textures/characters/snail_still.png" type="Texture" id=3]
+[ext_resource path="res://textures/hats/pilgrim.png" type="Texture" id=4]
+[ext_resource path="res://textures/characters/snail_still45.png" type="Texture" id=5]
+[ext_resource path="res://textures/hats/fez45.png" type="Texture" id=6]
+[ext_resource path="res://textures/hats/fez.png" type="Texture" id=7]
+
+[node name="SnailVisual" type="Node2D"]
+script = ExtResource( 1 )
+snail90Path = NodePath("Snail90")
+snail45Path = NodePath("Snail45")
+hat1Paths = [ NodePath("Snail90/PilgrimHat"), NodePath("Snail45/Pilgrim45") ]
+hat2Paths = [ NodePath("Snail90/FezHat"), NodePath("Snail45/Fez45") ]
+
+[node name="Snail90" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+centered = false
+offset = Vector2( -29.716, -40.55 )
+
+[node name="PilgrimHat" type="Sprite" parent="Snail90"]
+visible = false
+position = Vector2( -3, -23 )
+texture = ExtResource( 4 )
+
+[node name="FezHat" type="Sprite" parent="Snail90"]
+visible = false
+position = Vector2( -3, -23 )
+texture = ExtResource( 7 )
+
+[node name="Snail45" type="Sprite" parent="."]
+visible = false
+texture = ExtResource( 5 )
+centered = false
+offset = Vector2( -32.19, -24.803 )
+
+[node name="Pilgrim45" type="Sprite" parent="Snail45"]
+visible = false
+position = Vector2( -20, -5 )
+texture = ExtResource( 2 )
+
+[node name="Fez45" type="Sprite" parent="Snail45"]
+position = Vector2( -20, -6 )
+texture = ExtResource( 6 )

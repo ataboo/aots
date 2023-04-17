@@ -1,13 +1,14 @@
 using Godot;
 using System;
+using System.Linq;
 
 public class SnailSpriteControl : Node2D
 {
     private int debugCount;
 
-    [Export]
-    public NodePath snailControlPath;
-    private SnailControl _snailControl;
+    // [Export]
+    // public NodePath snailControlPath;
+    // private SnailControl _snailControl;
 
     [Export]
     public NodePath snail90Path;
@@ -17,17 +18,35 @@ public class SnailSpriteControl : Node2D
     public NodePath snail45Path;
     private Sprite _snail45Sprite;
 
+    private GameManager _gameManager;
+
+    [Export]
+    public NodePath[] hat1Paths;
+    private Sprite[] _hat1Sprites;
+
+    [Export]
+    public NodePath[] hat2Paths;
+    private Sprite[] _hat2Sprites;
+
+    private Node2D _parent;
+
     public override void _Ready()
     {
-        _snailControl = GetNode<SnailControl>(snailControlPath) ?? throw new NullReferenceException();
         _snail90Sprite = GetNode<Sprite>(snail90Path) ?? throw new NullReferenceException();
         _snail45Sprite = GetNode<Sprite>(snail45Path) ?? throw new NullReferenceException();
+        _gameManager = GetNode<GameManager>("/root/GameManager") ?? throw new NullReferenceException();
+        _parent = GetParent<Node2D>();
+
+        _hat1Sprites = hat1Paths.Select(p => GetNode<Sprite>(p) ?? throw new NullReferenceException()).ToArray();
+        _hat2Sprites = hat2Paths.Select(p => GetNode<Sprite>(p) ?? throw new NullReferenceException()).ToArray();
+
+        RenderHats();
     }
 
     public override void _PhysicsProcess(float delta)
     {
-        var roundedPos = new Vector2(Mathf.Round(_snailControl.Position.x), Mathf.Round(_snailControl.Position.y));
-        Position = roundedPos - _snailControl.Position;
+        var roundedPos = new Vector2(Mathf.Round(_parent.Position.x), Mathf.Round(_parent.Position.y));
+        Position = roundedPos - _parent.Position;
     }
 
     public void UpdateSnailSprite(SnailState state) {
@@ -144,5 +163,35 @@ public class SnailSpriteControl : Node2D
 
         _snail45Sprite.FlipH = flipH;
         _snail90Sprite.FlipH = flipH;
+    }
+
+    private void HideAllHats() {
+        var allHats = _hat1Sprites.Concat(_hat2Sprites);
+        foreach(var s in allHats) {
+            s.Visible = false;
+        }
+    }
+
+    public void RenderHats() {
+        HideAllHats();
+        
+        Sprite[] hatSprites;
+        switch(_gameManager.GameState.equippedHat) {
+            case -1:
+                return;
+            case 0:
+                hatSprites = _hat1Sprites;
+                break;
+            case 1:
+                hatSprites = _hat2Sprites;
+                break;
+            default:
+                throw new NotSupportedException();
+
+        }
+
+        foreach(var s in hatSprites) {
+            s.Visible = true;
+        } 
     }
 }

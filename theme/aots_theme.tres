@@ -1,31 +1,24 @@
-[gd_resource type="Theme" load_steps=5 format=2]
+[gd_resource type="Theme" load_steps=8 format=2]
 
 [ext_resource path="res://fonts/feast-of-flesh-bb.regular.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://theme/PanelStylebox.tres" type="StyleBox" id=2]
+[ext_resource path="res://theme/menu_button_normal_style.tres" type="StyleBox" id=3]
+[ext_resource path="res://theme/menu_button_hover_style.tres" type="StyleBox" id=4]
+[ext_resource path="res://theme/menu_button_press_style.tres" type="StyleBox" id=5]
+[ext_resource path="res://theme/label_font.tres" type="DynamicFont" id=6]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=2]
+size = 24
 font_data = ExtResource( 1 )
 
-[sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0.882353, 0.709804, 0.462745, 1 )
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id=3]
-bg_color = Color( 0.972549, 0.933333, 0.866667, 1 )
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-expand_margin_left = 3.0
-expand_margin_right = 3.0
-expand_margin_top = 3.0
-expand_margin_bottom = 6.0
-
 [resource]
+Button/fonts/font = SubResource( 2 )
+Button/styles/focus = ExtResource( 3 )
+Button/styles/hover = ExtResource( 4 )
+Button/styles/normal = ExtResource( 3 )
+Button/styles/pressed = ExtResource( 5 )
 Label/colors/font_color = Color( 0.588235, 0, 0, 1 )
 Label/colors/font_color_shadow = Color( 0, 0, 0, 0.333333 )
-Label/fonts/font = SubResource( 1 )
-Panel/styles/panel = SubResource( 2 )
-PanelContainer/styles/panel = SubResource( 3 )
+Label/fonts/font = ExtResource( 6 )
+Panel/styles/panel = null
+PanelContainer/styles/panel = ExtResource( 2 )

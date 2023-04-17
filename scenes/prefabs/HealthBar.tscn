@@ -1,38 +1,40 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/ui/HealthBarControl.cs" type="Script" id=1]
 [ext_resource path="res://theme/FloatBarStyle.tres" type="StyleBox" id=2]
 [ext_resource path="res://theme/aots_theme.tres" type="Theme" id=3]
+[ext_resource path="res://textures/ui/air_icon.png" type="Texture" id=4]
+
+[sub_resource type="StyleBoxFlat" id=1]
 
 [node name="HealthBar" type="HBoxContainer"]
-margin_right = 160.0
+margin_right = 120.0
 margin_bottom = 20.0
-rect_min_size = Vector2( 164, 0 )
-size_flags_vertical = 0
 theme = ExtResource( 3 )
-custom_constants/separation = 0
-alignment = 1
+custom_constants/separation = 6
 script = ExtResource( 1 )
 coloredPanelPath = NodePath("Control/ColoredPanel")
-labelPath = NodePath("Label")
+iconPath = NodePath("TextureRect")
+barStyle = ExtResource( 2 )
+iconTexture = ExtResource( 4 )
 
-[node name="Label" type="Label" parent="."]
-margin_left = 7.0
-margin_right = 57.0
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_right = 20.0
 margin_bottom = 20.0
-rect_min_size = Vector2( 50, 20 )
-text = "Float"
-valign = 1
+rect_min_size = Vector2( 20, 20 )
+texture = ExtResource( 4 )
+stretch_mode = 4
 
-[node name="Control" type="Control" parent="."]
-margin_left = 57.0
+[node name="Control" type="Panel" parent="."]
+margin_left = 26.0
 margin_top = 2.0
-margin_right = 157.0
+margin_right = 126.0
 margin_bottom = 18.0
 grow_vertical = 2
 rect_min_size = Vector2( 100, 16 )
 size_flags_horizontal = 5
 size_flags_vertical = 4
+custom_styles/panel = SubResource( 1 )
 
 [node name="ColoredPanel" type="Panel" parent="Control"]
 margin_right = 100.0

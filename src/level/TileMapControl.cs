@@ -1,13 +1,13 @@
 using Godot;
-using System;
+using System.Linq;
 
+[Tool]
 public class TileMapControl : TileMap
 {
-    private TileSetControl _tileSetControl;
+    private TileSetControl _tileSetControl => TileSet as TileSetControl;
 
     public override void _Ready()
     {
-        this._tileSetControl = TileSet as TileSetControl ?? throw new NullReferenceException();
     }
 
     public bool PositionIsSpike(Vector2 position) {
@@ -17,5 +17,24 @@ public class TileMapControl : TileMap
         }
 
         return _tileSetControl.TileIsSpike(tileId);
+    }
+
+    public Vector2[] GetShmooSpawnPoints() {
+        var shmooPoints = new Vector2[]{};
+
+        foreach(Vector2 mapPos in GetUsedCells()) {
+            var cellId = GetCell((int)mapPos.x, (int)mapPos.y);
+            var autotilePos = GetCellAutotileCoord((int)mapPos.x, (int)mapPos.y);
+
+            var localPoints = _tileSetControl.LocalShmooPoints(cellId, autotilePos);
+
+            if(localPoints.Length > 0) {
+                GD.Print($"ID: {cellId}, Atlaspos: {autotilePos}, Points: {localPoints.Length}");
+            }
+
+            shmooPoints = shmooPoints.Concat(localPoints.Select(lp => MapToWorld(mapPos) + lp)).ToArray();
+        }
+        
+        return shmooPoints.ToArray();
     }
 }
