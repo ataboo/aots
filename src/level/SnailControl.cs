@@ -29,6 +29,9 @@ public class SnailControl : KinematicBody2D
     [Export]
     public float gravity = 200f;
 
+    [Export]
+    public float bubbleForce = 300f;
+
     [Export(PropertyHint.Range, "0.0,1.0")]
     public float friction = 0.1f;
 
@@ -49,6 +52,8 @@ public class SnailControl : KinematicBody2D
     public SnailState SnailState => _state;
 
     private Vector2 _startPosition;
+
+    public bool InBubbles {get; set;}
 
     public override void _Ready()
     {
@@ -124,13 +129,16 @@ public class SnailControl : KinematicBody2D
                     _state.velocity.y = Mathf.Lerp(_state.velocity.y, 0, friction);
                 }
             }
-            if(_state.onWall || _state.onFloor) {
+            if(!InBubbles && (_state.onWall || _state.onFloor)) {
                 if(((Vector2)_state.floorNormal).x != _state.input.x) {
                     _state.velocity -= (Vector2)_state.floorNormal * wallStick;
                 }
             }
         }
 
+        if(InBubbles) {
+            _state.velocity.y -= bubbleForce * delta;
+        }
         
         _state.velocity = MoveAndSlide(_state.velocity, Vector2.Up, stopOnSlope: true);
 

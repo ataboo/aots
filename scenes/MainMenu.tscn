@@ -216,6 +216,7 @@ size_flags_vertical = 2
 position = Vector2( 193, 119 )
 
 [node name="SnailVisual" parent="Equipment/Panel/VBoxContainer/Panel/HatSnail" instance=ExtResource( 9 )]
+showRoomMode = true
 
 [node name="Hat1Button" type="TextureButton" parent="Equipment/Panel/VBoxContainer/Panel"]
 margin_left = 146.0

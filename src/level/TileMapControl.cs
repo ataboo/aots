@@ -26,11 +26,12 @@ public class TileMapControl : TileMap
             var cellId = GetCell((int)mapPos.x, (int)mapPos.y);
             var autotilePos = GetCellAutotileCoord((int)mapPos.x, (int)mapPos.y);
 
-            var localPoints = _tileSetControl.LocalShmooPoints(cellId, autotilePos);
-
-            if(localPoints.Length > 0) {
-                GD.Print($"ID: {cellId}, Atlaspos: {autotilePos}, Points: {localPoints.Length}");
+            var aboveCellId = GetCell((int)mapPos.x, (int)mapPos.y-1);
+            if(_tileSetControl.TileIsSpike(aboveCellId)) {
+                continue;
             }
+
+            var localPoints = _tileSetControl.LocalShmooPoints(cellId, autotilePos);
 
             shmooPoints = shmooPoints.Concat(localPoints.Select(lp => MapToWorld(mapPos) + lp)).ToArray();
         }

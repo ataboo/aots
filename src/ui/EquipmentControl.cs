@@ -32,7 +32,6 @@ public class EquipmentControl : Panel
     }
 
     public void OnHatClick(int hatIdx) {
-        GD.Print($"Hat clicked: {hatIdx}");
         _gameManager.SetEquippedHat(_gameManager.GameState.equippedHat == hatIdx ? -1 : hatIdx);
 
         _snailVisual.RenderHats();

@@ -54,7 +54,6 @@ public class LevelControl : Node2D
 		}
 
 		_state.shmooCount = shmooCount;
-		GD.Print($"Count: {shmooCount.count} / {shmooCount.initial}");
 
 		if(_state.WonGame()) {
 			_victoryMenu.ShowVictory(_state);

@@ -41,7 +41,6 @@ public class TileSetControl : TileSet
         }
 
         if(_shmooPoints.TryGetValue(new AutoTileId(tileId, (int)autotilePos.x, (int)autotilePos.y), out var points)) {
-            GD.Print($"Id: {tileId}, x {autotilePos.y}, y {autotilePos.x}");
             return points;
         }
 
@@ -49,11 +48,31 @@ public class TileSetControl : TileSet
     }
 
     private void InitShmooPoints() {
-        GD.Print("init?");
         _shmooPoints = new Dictionary<AutoTileId, Vector2[]>{
-            {AutoTileId.FromName(this, "sand_flat", 0, 0), new Vector2[]{new Vector2(0, 0)}},
-            {AutoTileId.FromName(this, "sand_corner", 0, 0), new Vector2[]{new Vector2(0, 0)}},
+            {AutoTileId.FromName(this, "sand_corner", 0, 0), PointsAlongLine(new Vector2(8, 0), new Vector2(56, 0), 5)},
+            {AutoTileId.FromName(this, "sand_corner", 1, 0), PointsAlongLine(new Vector2(8, 0), new Vector2(56, 0), 5)},
+
+            {AutoTileId.FromName(this, "sand_pad", 0, 0), PointsAlongLine(new Vector2(16, 0), new Vector2(56, 0), 4)},
+            {AutoTileId.FromName(this, "sand_pad", 1, 0), PointsAlongLine(new Vector2(8, 0), new Vector2(56, 0), 5)},
+            {AutoTileId.FromName(this, "sand_pad", 2, 0), PointsAlongLine(new Vector2(8, 0), new Vector2(48, 0), 4)},
+
+            {AutoTileId.FromName(this, "sand_flat", 0, 0), PointsAlongLine(new Vector2(8, 56), new Vector2(56, 0), 6)},
+            {AutoTileId.FromName(this, "sand_flat", 1, 0), PointsAlongLine(new Vector2(8, 0), new Vector2(56, 0), 5)},
+            {AutoTileId.FromName(this, "sand_flat", 2, 0), PointsAlongLine(new Vector2(8, 0), new Vector2(56, 56), 6)},
         };
+    }
+
+    private Vector2[] PointsAlongLine(Vector2 p1, Vector2 p2, int pointCount) {
+        var deltaP = p2 - p1;
+        var len = deltaP.Length();
+
+        var points = new Vector2[pointCount];
+        for(int i=0; i<pointCount; i++) {
+            var t = (float)i / (pointCount-1);
+            points[i] = p1 + (deltaP * t);
+        }
+
+        return points;
     }
 }
 
