@@ -40,7 +40,7 @@ public class TileSetControl : TileSet
             InitShmooPoints();
         }
 
-        if(_shmooPoints.TryGetValue(new AutoTileId(tileId, (int)autotilePos.x, (int)autotilePos.y), out var points)) {
+        if(_shmooPoints.TryGetValue(AutoTileId.FromTileId(tileId, (int)autotilePos.x, (int)autotilePos.y), out var points)) {
             return points;
         }
 

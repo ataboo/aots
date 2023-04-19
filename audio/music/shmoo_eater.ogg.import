@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/shmoo_eater.ogg-2a8b1c706bf4b324cadf406d9dbd1e34.oggstr"
+
+[deps]
+
+source_file="res://audio/music/shmoo_eater.ogg"
+dest_files=[ "res://.import/shmoo_eater.ogg-2a8b1c706bf4b324cadf406d9dbd1e34.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

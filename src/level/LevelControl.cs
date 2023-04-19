@@ -25,12 +25,18 @@ public class LevelControl : Node2D
 
 	private GameManager _gameManager; 
 
+	[Export] NodePath soundPlayerPath;
+	private AudioStreamPlayer _soundPlayer;
+
+	[Export] AudioStream fishDieSound;
+
 
 	public override void _Ready()
 	{
 		_snailControl = GetNode<SnailControl>(snailPath) ?? throw new NullReferenceException();
 		_hudControl = GetNode<HUDControl>(hudPath) ?? throw new NullReferenceException();
 		_victoryMenu = GetNode<VictoryMenuControl>(victoryMenuPath) ?? throw new NullReferenceException();
+		_soundPlayer = GetNode<AudioStreamPlayer>(soundPlayerPath) ?? throw new NullReferenceException();
 
 		_startPosition = _snailControl.Position;
 
@@ -90,9 +96,20 @@ public class LevelControl : Node2D
 			damage += delta * _state.shmooDamageRate;
 		}
 
-		_state.fish1.health = Mathf.Max(0, _state.fish1.health - damage);
-		_state.fish2.health = Mathf.Max(0, _state.fish2.health - damage);
-		_state.fish3.health = Mathf.Max(0, _state.fish3.health - damage);
+		var allFish = new FishState[]{_state.fish1, _state.fish2, _state.fish3};
+
+		foreach(var fish in allFish) {
+			if(fish.health == 0) {
+				continue;
+			}
+
+			fish.health = Mathf.Max(0, fish.health - damage);
+
+			if(fish.health == 0) {
+				_soundPlayer.Stream = fishDieSound;
+				_soundPlayer.Play();
+			}
+		}
 
 		if(_state.LostGame()) {
 			_victoryMenu.ShowVictory(_state);

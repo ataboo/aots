@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/AOTS_win_range.ogg-481e70054eabab06a8c3e72b144ac844.oggstr"
+
+[deps]
+
+source_file="res://audio/effects/AOTS_win_range.ogg"
+dest_files=[ "res://.import/AOTS_win_range.ogg-481e70054eabab06a8c3e72b144ac844.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

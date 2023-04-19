@@ -4,7 +4,11 @@ using System.Linq;
 [Tool]
 public class TileMapControl : TileMap
 {
+    private float jitterMax = 1f;
+
     private TileSetControl _tileSetControl => TileSet as TileSetControl;
+
+    private RandomNumberGenerator _rng = new RandomNumberGenerator();
 
     public override void _Ready()
     {
@@ -33,7 +37,10 @@ public class TileMapControl : TileMap
 
             var localPoints = _tileSetControl.LocalShmooPoints(cellId, autotilePos);
 
-            shmooPoints = shmooPoints.Concat(localPoints.Select(lp => MapToWorld(mapPos) + lp)).ToArray();
+            shmooPoints = shmooPoints.Concat(localPoints.Select(lp => {
+                var jitter = new Vector2(_rng.RandfRange(-jitterMax, jitterMax), _rng.RandfRange(-jitterMax, jitterMax));
+                return MapToWorld(mapPos) + lp + jitter;
+            })).ToArray();
         }
         
         return shmooPoints.ToArray();

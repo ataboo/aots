@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/AOTS_fail-range.ogg-7a950f05ddfb51c54e812c98bfac4c4e.oggstr"
+
+[deps]
+
+source_file="res://audio/effects/AOTS_fail-range.ogg"
+dest_files=[ "res://.import/AOTS_fail-range.ogg-7a950f05ddfb51c54e812c98bfac4c4e.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

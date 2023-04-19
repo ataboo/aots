@@ -63,7 +63,6 @@ public class ShmooHolderControl : Node2D
 		}
 
 		var shmooSpawnPoints = _mainTileMap.GetShmooSpawnPoints();
-		GD.Print(shmooSpawnPoints.Length);
 
 		foreach(var shmooPoint in shmooSpawnPoints) {
 			var prefab = _rng.RandomElement(_shmooPrefabs);

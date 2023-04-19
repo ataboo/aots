@@ -9,10 +9,14 @@ public class PauseMenuControl : Control
     public NodePath levelControlPath;
     private LevelControl _levelControl;
 
+    [Export] public NodePath victoryScreenPath;
+    private Control _victoryScreen;
+
     public override void _Ready()
     {
         _gameManager = GetNode<GameManager>("/root/GameManager") ?? throw new NullReferenceException();
         _levelControl = GetNode<LevelControl>(levelControlPath) ?? throw new NullReferenceException();
+        _victoryScreen = GetNode<Control>(victoryScreenPath) ?? throw new NullReferenceException();
     }
 
 	public override void _UnhandledInput(InputEvent @event) {
@@ -36,6 +40,10 @@ public class PauseMenuControl : Control
     }
 
     private void SetPaused(bool paused) {
+        if(_victoryScreen.Visible) {
+            return;
+        }
+
         Visible = paused;
         GetTree().Paused = paused;
     }

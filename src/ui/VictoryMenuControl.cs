@@ -1,12 +1,11 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public class VictoryMenuControl : Panel
 {
     [Export]
     public NodePath titleLabelPath;
-    [Export]
-    public NodePath cheatLabelPath;
     [Export]
     public NodePath fish1TexturePath;
     [Export]
@@ -18,8 +17,20 @@ public class VictoryMenuControl : Panel
     [Export]
     public NodePath nextButtonPath;
 
+    [Export]
+    public NodePath victoryPlayerPath;
+
+    private AudioStreamPlayer _victoryPlayer;
+
+    [Export] public AudioStream liveSound;
+
+    [Export] public AudioStream deadSound;
+
+    [Export] public AudioStream winSound;
+
+    [Export] public AudioStream loseSound;
+
     private Label _titleLabel;
-    private Label _cheatCodeLabel;
     private TextureRect _fish1Texture;
     private TextureRect _fish2Texture;
     private TextureRect _fish3Texture;
@@ -33,29 +44,49 @@ public class VictoryMenuControl : Panel
     public override void _Ready()
     {
         _titleLabel = GetNode<Label>(titleLabelPath) ?? throw new NullReferenceException();
-        _cheatCodeLabel = GetNode<Label>(cheatLabelPath) ?? throw new NullReferenceException();
         _fish1Texture = GetNode<TextureRect>(fish1TexturePath) ?? throw new NullReferenceException();
         _fish2Texture = GetNode<TextureRect>(fish2TexturePath) ?? throw new NullReferenceException();
         _fish3Texture = GetNode<TextureRect>(fish3TexturePath) ?? throw new NullReferenceException();
         _hudControl = GetNode<HUDControl>(hudControlPath) ?? throw new NullReferenceException();
         _nextButton = GetNode<Button>(nextButtonPath) ?? throw new NullReferenceException();
+        _victoryPlayer = GetNode<AudioStreamPlayer>(victoryPlayerPath) ?? throw new NullReferenceException();
         _gameManager = GetNode<GameManager>("/root/GameManager");
     }
 
-    public void ShowVictory(LevelState state) {
+    async public Task ShowVictory(LevelState state) {
+        _fish1Texture.Texture = null;
+        _fish2Texture.Texture = null;
+        _fish3Texture.Texture = null;
+        _titleLabel.Text = "Ended";
+        _nextButton.Visible = false;
+        _levelState = state;
+
         GetTree().Paused = true;
         Visible = true;
 
-        _levelState = state;
-        _titleLabel.Text = !state.WonGame() ? "Fail!" : "Victory!";
-        _fish1Texture.Texture = _hudControl.TextureForFish(state.fish1);
-        _fish2Texture.Texture = _hudControl.TextureForFish(state.fish2);
-        _fish3Texture.Texture = _hudControl.TextureForFish(state.fish3);
-        _nextButton.Text = state.WonGame() ? "Next" : "Restart";
+        ShowFishResult(_fish1Texture, state.fish1);
+
+        await ToSignal(GetTree().CreateTimer(.7f), "timeout");
+        ShowFishResult(_fish2Texture, state.fish2);
+
+        await ToSignal(GetTree().CreateTimer(.7f), "timeout");
+        ShowFishResult(_fish3Texture, state.fish3);
+
+        await ToSignal(GetTree().CreateTimer(.7f), "timeout");
         
-        var cheatCode = StatsHolder.StartingStats[state.levelIndex].cheatCode;
-        _cheatCodeLabel.Visible = cheatCode != "" && state.WonGame();
-        _cheatCodeLabel.Text = $"Code: {cheatCode}";
+        _titleLabel.Text = !state.WonGame() ? "Fail!" : "Victory!";
+        _nextButton.Text = state.WonGame() ? "Next" : "Restart";
+        _nextButton.Visible = true;
+
+        _victoryPlayer.Stream = state.WonGame() ? winSound : loseSound;
+        _victoryPlayer.Play();
+    }
+
+    private void ShowFishResult(TextureRect rect, FishState fishState) {
+       rect.Texture = _hudControl.TextureForFish(fishState);
+       _victoryPlayer.Stream = fishState.health > 0 ? liveSound : deadSound;
+       _victoryPlayer.Play();
+
     }
 
     public void OnNextClick() {

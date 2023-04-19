@@ -42,10 +42,15 @@ public class SnailControl : KinematicBody2D
     public float wallStick = 200f;
 
     [Export]
-    public float floatCapacity = 1.2f;
+    public float floatCapacity = 1.8f;
 
     [Export]
     public float floatRechargeFactor = 0.75f;
+
+    [Export] public NodePath snailAudioPath;
+    private AudioStreamPlayer _snailAudio;
+
+    [Export] AudioStream dieSound;
 
     private SnailState _state = new SnailState();
 
@@ -60,6 +65,7 @@ public class SnailControl : KinematicBody2D
         _snailSprite = GetNode<SnailSpriteControl>(snailSpritePath) ?? throw new NullReferenceException();
         _rightWallDetector = GetNode<Area2D>(rightWallDetectorPath) ?? throw new NullReferenceException();
         _leftWallDetector = GetNode<Area2D>(leftWallDetectorPath) ?? throw new NullReferenceException();
+        _snailAudio = GetNode<AudioStreamPlayer>(snailAudioPath) ?? throw new NullReferenceException();
 
         _startPosition = Position;
 
@@ -143,6 +149,8 @@ public class SnailControl : KinematicBody2D
         _state.velocity = MoveAndSlide(_state.velocity, Vector2.Up, stopOnSlope: true);
 
         if(CollidedWithHazard()) {
+            _snailAudio.Stream = dieSound;
+            _snailAudio.Play();
             RestartLevel();
         }
         

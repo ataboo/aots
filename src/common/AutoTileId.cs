@@ -1,21 +1,22 @@
 using Godot;
 
-public class AutoTileId {
+public class AutoTileId: Godot.Object {
     public string tileName;
     public int x;
     public int y;
     public int tileId = -1;
 
-    public AutoTileId(int tileId, int x, int y) {
-        this.tileId = tileId;
-        this.x = x;
-        this.y = y;
+    public static AutoTileId FromTileId(int tileId, int x, int y) {
+        return new AutoTileId() {
+            tileId = tileId,
+            x = x,
+            y = y,
+        };
     }
 
     public static AutoTileId FromName(TileSet tileSet, string tileName, int x, int y) {
-        var id = new AutoTileId(tileSet.FindTileByName(tileName), x, y){
-            tileName = tileName
-        };
+        var id = AutoTileId.FromTileId(tileSet.FindTileByName(tileName), x, y);
+        id.tileName = tileName;
         
         if(id.tileId < 0) {
             GD.PushError($"Failed to find tile with name: {tileName}");

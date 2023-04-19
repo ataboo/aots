@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scenes/prefabs/SnailVisual.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/level/SnailControl.cs" type="Script" id=2]
+[ext_resource path="res://audio/effects/AOTS_fail-range.ogg" type="AudioStream" id=3]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 20.2237
@@ -19,6 +20,8 @@ leftWallDetectorPath = NodePath("LeftWallDetector2")
 snailSpritePath = NodePath("SnailVisual")
 floatVelocity = 60.0
 floatCapacity = 0.4
+snailAudioPath = NodePath("SnailAudio")
+dieSound = ExtResource( 3 )
 
 [node name="SnailCol" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
@@ -40,3 +43,6 @@ collision_mask = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWallDetector2"]
 position = Vector2( -20, 0 )
 shape = SubResource( 2 )
+
+[node name="SnailAudio" type="AudioStreamPlayer" parent="."]
+bus = "Effects"

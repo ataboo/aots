@@ -14,6 +14,10 @@ config/name="Attack of the Snail"
 run/main_scene="res://scenes/MainMenu.tscn"
 config/icon="res://icon.png"
 
+[audio]
+
+default_bus_layout="res://audio/audio_bus_layout.tres"
+
 [autoload]
 
 GameManager="*res://scenes/GameManagerScene.tscn"
