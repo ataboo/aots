@@ -13,4 +13,5 @@ public class SnailState {
     public float floatTime;
     public float maxFloatTime;
     public int lastDirection;
+    public Vector2? lastFloorNormal;
 }

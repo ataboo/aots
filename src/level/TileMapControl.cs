@@ -4,7 +4,7 @@ using System.Linq;
 [Tool]
 public class TileMapControl : TileMap
 {
-    private float jitterMax = 1f;
+    private const float jitterMax = 1f;
 
     private TileSetControl _tileSetControl => TileSet as TileSetControl;
 

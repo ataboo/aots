@@ -16,6 +16,9 @@ public class LevelControl : Node2D
 	public NodePath victoryMenuPath;
 	private VictoryMenuControl _victoryMenu;
 
+	[Export] public NodePath heaterPath;
+	private HeaterControl _heater;
+
 	private Vector2 _startPosition;
 
 	private LevelState _state;
@@ -37,6 +40,7 @@ public class LevelControl : Node2D
 		_hudControl = GetNode<HUDControl>(hudPath) ?? throw new NullReferenceException();
 		_victoryMenu = GetNode<VictoryMenuControl>(victoryMenuPath) ?? throw new NullReferenceException();
 		_soundPlayer = GetNode<AudioStreamPlayer>(soundPlayerPath) ?? throw new NullReferenceException();
+		_heater = GetNode<HeaterControl>(heaterPath) ?? throw new NullReferenceException();
 
 		_startPosition = _snailControl.Position;
 
@@ -86,7 +90,9 @@ public class LevelControl : Node2D
 				initialHealth = startingStats.fish3Health
 			},
 			shmooCount = new ShmooCount(),
-			shmooDamageRate = startingStats.shmooDamageRate
+			shmooDamageRate = startingStats.shmooDamageRate,
+			tempDamageRate = startingStats.tempDamageRate,
+			temperature = 0.5f,
 		};
 	}
 
@@ -95,6 +101,16 @@ public class LevelControl : Node2D
 		if(_state.shmooCount.count > 0) {
 			damage += delta * _state.shmooDamageRate;
 		}
+
+		_state.temperature = Mathf.Lerp(_state.temperature, _heater.DialLevel(), 0.1f * delta);
+		_heater.UpdateGauge(_state.temperature);
+
+		var tempImbalance = Mathf.Abs((_state.temperature - 0.5f) * 2);
+
+		if(tempImbalance > 0.25f) {
+			damage += delta * _state.tempDamageRate * tempImbalance;
+		}
+
 
 		var allFish = new FishState[]{_state.fish1, _state.fish2, _state.fish3};
 

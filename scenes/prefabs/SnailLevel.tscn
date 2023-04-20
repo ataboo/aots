@@ -8,7 +8,7 @@
 radius = 20.2237
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 2.25, 12 )
+extents = Vector2( 2.25, 8 )
 
 [node name="Snail" type="KinematicBody2D"]
 position = Vector2( 37, -21 )

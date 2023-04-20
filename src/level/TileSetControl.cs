@@ -1,9 +1,15 @@
 using Godot;
 using System.Collections.Generic;
+using System.Linq;
+
 
 [Tool]
 public class TileSetControl : TileSet
 {
+    const float PointDensity = 0.5f;
+
+    private RandomNumberGenerator _rng = new RandomNumberGenerator();
+
     private string[] _spikeTileNames = new string[]{
         "spike_up",
         "spike_down",
@@ -66,10 +72,14 @@ public class TileSetControl : TileSet
         var deltaP = p2 - p1;
         var len = deltaP.Length();
 
-        var points = new Vector2[pointCount];
+        var points = new Vector2[]{};
+
         for(int i=0; i<pointCount; i++) {
-            var t = (float)i / (pointCount-1);
-            points[i] = p1 + (deltaP * t);
+            var roll = _rng.Randf();
+            if(roll < PointDensity) {
+                var t = (float)i / (pointCount-1);
+                points = points.Append(p1 + (deltaP * t)).ToArray();
+            }
         }
 
         return points;

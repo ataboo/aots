@@ -17,6 +17,7 @@ public class HUDControl : Control
     public NodePath fish3BarPath;
     [Export]
     public NodePath shmooBarPath;
+    [Export] public NodePath heaterBarPath;
 
     [Export]
     public Texture deadFishTexture;
@@ -33,6 +34,9 @@ public class HUDControl : Control
     private HealthBarControl _fish2Bar;
     private HealthBarControl _fish3Bar;
     private HealthBarControl _shmooBar;
+    private HealthBarControl _heaterBar;
+
+    private bool heaterInit = false;
 
     public override void _Ready()
     {
@@ -43,11 +47,8 @@ public class HUDControl : Control
         _fish2Bar = GetNode<HealthBarControl>(fish2BarPath) ?? throw new NullReferenceException();
         _fish3Bar = GetNode<HealthBarControl>(fish3BarPath) ?? throw new NullReferenceException();
         _shmooBar = GetNode<HealthBarControl>(shmooBarPath) ?? throw new NullReferenceException();
+        _heaterBar = GetNode<HealthBarControl>(heaterBarPath) ?? throw new NullReferenceException();
         _hatUnlock = GetNode<HatUnlockControl>(hatUnlockPath) ?? throw new NullReferenceException();
-    }
-
-    public void AddHealthBars(string[] labels) {
-        throw new NotImplementedException();
     }
 
     public void UpdateHUD(SnailState snailState, LevelState levelState) {
@@ -58,6 +59,12 @@ public class HUDControl : Control
         UpdateFishHealth(_fish3Bar, levelState.fish3);
 
         this._shmooBar.SetLevel(1 - levelState.shmooCount.CountProgress);
+
+        if(!_heaterBar.Visible) {
+            _heaterBar.Visible = true;       
+        }
+
+        _heaterBar.SetLevel(levelState.temperature, levelState.temperature.ColorForTemperature());
     }
     
     private void UpdateFishHealth(HealthBarControl healthBar, FishState fishState) {

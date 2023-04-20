@@ -54,7 +54,9 @@ public class ShmooHolderControl : Node2D
 			initial = childCount
 		};
 		
-		CallDeferred(nameof(EmitShmooCount));
+		if(!Engine.EditorHint) {
+			CallDeferred(nameof(EmitShmooCount));
+		}
 	}
 
 	private void RunShmooGeneration() {

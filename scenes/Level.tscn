@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=54 format=2]
 
 [ext_resource path="res://textures/tiles/LevelTilemap.tres" type="TileSet" id=1]
 [ext_resource path="res://scenes/prefabs/SnailLevel.tscn" type="PackedScene" id=2]
@@ -16,14 +16,14 @@
 [ext_resource path="res://scenes/prefabs/Shmoo2.tscn" type="PackedScene" id=14]
 [ext_resource path="res://scenes/prefabs/Shmoo3.tscn" type="PackedScene" id=15]
 [ext_resource path="res://textures/ui/fish_alive_icon.png" type="Texture" id=16]
-[ext_resource path="res://theme/HealthBarStyle.tres" type="StyleBox" id=17]
+[ext_resource path="res://textures/ui/temp_icon.png" type="Texture" id=17]
 [ext_resource path="res://textures/ui/fish_dead_icon.png" type="Texture" id=18]
 [ext_resource path="res://src/ui/HatUnlockControl.cs" type="Script" id=19]
 [ext_resource path="res://src/ui/PauseMenuControl.cs" type="Script" id=20]
 [ext_resource path="res://theme/overlay_style.tres" type="StyleBox" id=21]
 [ext_resource path="res://theme/hud_transparent_panel.tres" type="StyleBox" id=22]
 [ext_resource path="res://textures/ui/shmoo_icon.png" type="Texture" id=23]
-[ext_resource path="res://theme/ShmooBarStyle.tres" type="StyleBox" id=24]
+[ext_resource path="res://textures/tiles/heater-back.png" type="Texture" id=24]
 [ext_resource path="res://src/ui/VictoryMenuControl.cs" type="Script" id=25]
 [ext_resource path="res://textures/characters/long_anubis.png" type="Texture" id=26]
 [ext_resource path="res://scenes/prefabs/Chest.tscn" type="PackedScene" id=27]
@@ -37,6 +37,15 @@
 [ext_resource path="res://audio/effects/AOTS_fail-range.ogg" type="AudioStream" id=35]
 [ext_resource path="res://audio/effects/AOTS_win_range.ogg" type="AudioStream" id=36]
 [ext_resource path="res://audio/effects/bubble_loop.ogg" type="AudioStream" id=37]
+[ext_resource path="res://src/level/HeaterControl.cs" type="Script" id=38]
+[ext_resource path="res://src/level/ShmooControl.cs" type="Script" id=39]
+[ext_resource path="res://audio/effects/pop5.wav" type="AudioStream" id=40]
+[ext_resource path="res://audio/effects/pop4.wav" type="AudioStream" id=41]
+[ext_resource path="res://audio/effects/pop1.wav" type="AudioStream" id=42]
+[ext_resource path="res://audio/effects/pop3.wav" type="AudioStream" id=43]
+[ext_resource path="res://textures/tiles/heater-dial.png" type="Texture" id=44]
+[ext_resource path="res://src/level/DialControl.cs" type="Script" id=45]
+[ext_resource path="res://audio/effects/pop2.wav" type="AudioStream" id=46]
 
 [sub_resource type="Gradient" id=1]
 offsets = PoolRealArray( 0.562319 )
@@ -52,15 +61,27 @@ extents = Vector2( 30.5, 156 )
 [sub_resource type="Curve" id=3]
 _data = [ Vector2( 0, 0.358896 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
 
+[sub_resource type="CapsuleShape2D" id=8]
+radius = 27.0
+height = 282.0
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 6.5, 8 )
+
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 8, 3.375 )
+
 [node name="Level" type="Node2D"]
 script = ExtResource( 9 )
 snailPath = NodePath("World/Snail")
 hudPath = NodePath("CanvasLayer/HUD")
 victoryMenuPath = NodePath("CanvasLayer/VictoryOverlay")
+heaterPath = NodePath("World/Scenery/Heater")
 soundPlayerPath = NodePath("SoundPlayer")
 fishDieSound = ExtResource( 35 )
 
 [node name="SoundPlayer" type="AudioStreamPlayer" parent="."]
+bus = "Effects"
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 32 )
@@ -83,7 +104,7 @@ tile_set = ExtResource( 1 )
 collision_layer = 3
 collision_mask = 3
 format = 1
-tile_data = PoolIntArray( -1114116, 18, 0, -1114115, 18, 1, -1179624, 18, 1, -1179623, 18, 2, -1048580, 18, 65536, -1114087, 18, 65538, -983044, 18, 65536, -1048551, 18, 65538, -917508, 18, 65536, -983015, 18, 65538, -851972, 18, 65536, -917479, 18, 65538, -786436, 18, 65536, -851943, 18, 65538, -720900, 18, 65536, -786407, 18, 65538, -655364, 18, 65536, -720871, 18, 65538, -589828, 18, 65536, -655335, 18, 65538, -524292, 18, 65536, -589806, 23, 0, -589799, 18, 65538, -458757, 0, 0, -458756, 18, 65536, -458755, 0, 0, -458754, 0, 0, -458753, 0, 0, -524288, 0, 0, -524287, 0, 0, -524286, 0, 0, -524285, 0, 0, -524284, 0, 0, -524283, 0, 0, -524282, 0, 0, -524281, 0, 0, -524280, 0, 0, -524275, 28, 0, -524274, 28, 1, -524273, 28, 2, -524271, 28, 0, -524270, 28, 1, -524269, 28, 1, -524268, 28, 1, -524267, 28, 2, -524263, 18, 65538, -393221, 0, 0, -393220, 18, 65536, -458747, 23, 0, -458745, 0, 65543, -458744, 0, 0, -458727, 18, 65538, -327685, 0, 0, -327684, 18, 65536, -327681, 24, 0, -393212, 28, 0, -393211, 28, 2, -393208, 0, 0, -393191, 18, 65538, -262149, 0, 0, -262148, 18, 65536, -262145, 28, 0, -327680, 28, 1, -327679, 28, 2, -327672, 28, 0, -327671, 28, 2, -327668, 0, 1, -327667, 0, 2, -327666, 0, 3, -327655, 18, 65538, -196613, 0, 0, -196612, 18, 65536, -262144, 0, 5, -262143, 0, 6, -262142, 0, 6, -262141, 0, 7, -262119, 18, 65538, -131077, 0, 0, -131076, 18, 65536, -196600, 0, 0, -196596, 0, 2, -196595, 0, 2, -196594, 0, 2, -196593, 0, 65538, -196583, 18, 65538, -65541, 0, 0, -65540, 18, 65536, -131067, 0, 65537, -131066, 0, 2, -131065, 23, 0, -131064, 0, 131073, -131054, 23, 0, -131053, 23, 0, -131050, 23, 0, -131048, 17, 0, -131047, 18, 65538, -5, 0, 0, -4, 18, 65536, -3, 17, 2, -2, 23, 0, -1, 0, 65540, -65531, 0, 131073, -65530, 0, 0, -65529, 20, 0, -65528, 17, 1, -65527, 20, 1, -65526, 24, 0, -65525, 24, 0, -65524, 20, 0, -65523, 17, 1, -65522, 17, 1, -65521, 17, 1, -65520, 17, 1, -65519, 17, 1, -65518, 17, 1, -65517, 17, 1, -65516, 17, 1, -65515, 17, 1, -65514, 17, 1, -65513, 17, 1, -65512, 19, 0, -65511, 18, 65538, 65531, 0, 0, 65532, 18, 65536, 65533, 19, 1, 65534, 17, 1, 65535, 17, 1, 0, 17, 1, 1, 17, 1, 2, 17, 2, 5, 17, 0, 6, 17, 1, 7, 19, 0, 8, 17, 65537, 9, 19, 1, 10, 17, 1, 11, 17, 1, 12, 19, 0, 13, 17, 65537, 14, 17, 65537, 15, 17, 65537, 16, 17, 65537, 17, 17, 65537, 18, 17, 65537, 19, 17, 65537, 20, 17, 65537, 21, 17, 65537, 22, 17, 65537, 23, 17, 65537, 24, 17, 65537, 25, 18, 65538, 131068, 18, 65536, 131069, 17, 65537, 131070, 17, 65537, 131071, 17, 65537, 65536, 17, 65537, 65537, 17, 65537, 65538, 19, 1, 65539, 17, 1, 65540, 17, 1, 65541, 19, 0, 65542, 17, 65537, 65543, 17, 65537, 65544, 17, 65537, 65545, 17, 65537, 65546, 17, 65537, 65547, 17, 65537, 65548, 17, 65537, 65549, 17, 65537, 65550, 17, 65537, 65551, 17, 65537, 65552, 17, 65537, 65553, 17, 65537, 65554, 17, 65537, 65555, 17, 65537, 65556, 17, 65537, 65557, 17, 65537, 65558, 17, 65537, 65559, 17, 65537, 65560, 17, 65537, 65561, 18, 65538, 196604, 18, 131072, 196605, 18, 131073, 196606, 18, 131073, 196607, 18, 131073, 131072, 18, 131073, 131073, 18, 131073, 131074, 18, 131073, 131075, 18, 131073, 131076, 18, 131073, 131077, 18, 131073, 131078, 18, 131073, 131079, 18, 131073, 131080, 18, 131073, 131081, 18, 131073, 131082, 18, 131073, 131083, 18, 131073, 131084, 18, 131073, 131085, 18, 131073, 131086, 18, 131073, 131087, 18, 131073, 131088, 18, 131073, 131089, 18, 131073, 131090, 18, 131073, 131091, 18, 131073, 131092, 18, 131073, 131093, 18, 131073, 131094, 18, 131073, 131095, 18, 131073, 131096, 18, 131073, 131097, 18, 131074 )
+tile_data = PoolIntArray( -1114116, 18, 0, -1114115, 18, 1, -1179624, 18, 1, -1179623, 18, 2, -1048580, 18, 65536, -1114087, 18, 65538, -983044, 18, 65536, -1048551, 18, 65538, -917508, 18, 65536, -983015, 18, 65538, -851972, 18, 65536, -917479, 18, 65538, -786436, 18, 65536, -851943, 18, 65538, -720900, 18, 65536, -786407, 18, 65538, -655364, 18, 65536, -720871, 18, 65538, -589828, 18, 65536, -655335, 18, 65538, -524292, 18, 65536, -589806, 23, 0, -589799, 18, 65538, -458757, 0, 0, -458756, 18, 65536, -458755, 0, 0, -458754, 0, 0, -458753, 0, 0, -524288, 0, 0, -524287, 0, 0, -524286, 0, 0, -524285, 0, 0, -524284, 0, 0, -524283, 0, 0, -524282, 0, 0, -524281, 0, 0, -524280, 0, 0, -524275, 28, 0, -524274, 28, 2, -524271, 28, 0, -524270, 28, 1, -524269, 28, 1, -524268, 28, 1, -524267, 28, 2, -524263, 18, 65538, -393221, 0, 0, -393220, 18, 65536, -458747, 23, 0, -458745, 0, 65543, -458744, 0, 0, -458727, 18, 65538, -327685, 0, 0, -327684, 18, 65536, -327681, 24, 0, -393212, 28, 0, -393211, 28, 2, -393208, 0, 0, -393191, 18, 65538, -262149, 0, 0, -262148, 18, 65536, -262145, 28, 0, -327680, 28, 1, -327679, 28, 2, -327672, 28, 0, -327671, 28, 2, -327668, 0, 1, -327667, 0, 2, -327666, 0, 3, -327655, 18, 65538, -196613, 0, 0, -196612, 18, 65536, -262144, 0, 5, -262143, 0, 6, -262142, 0, 6, -262141, 0, 7, -262119, 18, 65538, -131077, 0, 0, -131076, 18, 65536, -196600, 0, 0, -196596, 0, 2, -196595, 0, 2, -196594, 0, 2, -196593, 0, 65538, -196583, 18, 65538, -65541, 0, 0, -65540, 18, 65536, -131067, 0, 65537, -131066, 0, 2, -131065, 23, 0, -131064, 0, 131073, -131059, 17, 0, -131058, 17, 2, -131054, 20, 0, -131053, 17, 2, -131050, 23, 0, -131048, 17, 0, -131047, 18, 65538, -5, 0, 0, -4, 18, 65536, -3, 17, 2, -2, 23, 0, -1, 0, 65540, -65531, 0, 131073, -65530, 0, 0, -65529, 20, 0, -65528, 17, 1, -65527, 20, 1, -65526, 24, 0, -65525, 24, 0, -65524, 20, 0, -65523, 19, 0, -65522, 19, 1, -65521, 17, 1, -65520, 17, 1, -65519, 17, 1, -65518, 19, 0, -65517, 19, 1, -65516, 17, 1, -65515, 17, 1, -65514, 17, 1, -65513, 17, 1, -65512, 19, 0, -65511, 18, 65538, 65531, 0, 0, 65532, 18, 65536, 65533, 19, 1, 65534, 17, 1, 65535, 17, 1, 0, 17, 1, 1, 17, 1, 2, 17, 2, 5, 17, 0, 6, 17, 1, 7, 19, 0, 8, 17, 65537, 9, 19, 1, 10, 17, 1, 11, 17, 1, 12, 19, 0, 13, 17, 65537, 14, 17, 65537, 15, 17, 65537, 16, 17, 65537, 17, 17, 65537, 18, 17, 65537, 19, 17, 65537, 20, 17, 65537, 21, 17, 65537, 22, 17, 65537, 23, 17, 65537, 24, 17, 65537, 25, 18, 65538, 131068, 18, 65536, 131069, 17, 65537, 131070, 17, 65537, 131071, 17, 65537, 65536, 17, 65537, 65537, 17, 65537, 65538, 19, 1, 65539, 17, 1, 65540, 17, 1, 65541, 19, 0, 65542, 17, 65537, 65543, 17, 65537, 65544, 17, 65537, 65545, 17, 65537, 65546, 17, 65537, 65547, 17, 65537, 65548, 17, 65537, 65549, 17, 65537, 65550, 17, 65537, 65551, 17, 65537, 65552, 17, 65537, 65553, 17, 65537, 65554, 17, 65537, 65555, 17, 65537, 65556, 17, 65537, 65557, 17, 65537, 65558, 17, 65537, 65559, 17, 65537, 65560, 17, 65537, 65561, 18, 65538, 196604, 18, 131072, 196605, 18, 131073, 196606, 18, 131073, 196607, 18, 131073, 131072, 18, 131073, 131073, 18, 131073, 131074, 18, 131073, 131075, 18, 131073, 131076, 18, 131073, 131077, 18, 131073, 131078, 18, 131073, 131079, 18, 131073, 131080, 18, 131073, 131081, 18, 131073, 131082, 18, 131073, 131083, 18, 131073, 131084, 18, 131073, 131085, 18, 131073, 131086, 18, 131073, 131087, 18, 131073, 131088, 18, 131073, 131089, 18, 131073, 131090, 18, 131073, 131091, 18, 131073, 131092, 18, 131073, 131093, 18, 131073, 131094, 18, 131073, 131095, 18, 131073, 131096, 18, 131073, 131097, 18, 131074 )
 script = ExtResource( 12 )
 __meta__ = {
 "_edit_lock_": true
@@ -94,598 +115,670 @@ z_index = -1
 
 [node name="ShmooHolder" type="Node2D" parent="World"]
 script = ExtResource( 13 )
+GenerateShmoo = true
 mainTileMapPath = NodePath("../MainTileMap")
 _shmooPrefabs = [ ExtResource( 11 ), ExtResource( 14 ), ExtResource( 15 ) ]
 
-[node name="Shmoo1" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 848.58, -508.58 )
-
-[node name="Shmoo2" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 864.929, -514.299 )
-
-[node name="Shmoo3" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 875.807, -510.59 )
-
-[node name="Shmoo4" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 891.037, -513.591 )
-
-[node name="Shmoo5" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 906.757, -510.615 )
-
-[node name="Shmoo6" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 913.085, -515.522 )
-
-[node name="Shmoo7" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 931.995, -515.773 )
-
-[node name="Shmoo8" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 942.451, -515.565 )
-
-[node name="Shmoo9" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 952.079, -509.667 )
-
-[node name="Shmoo10" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 969.907, -515.73 )
-
-[node name="Shmoo11" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 978.488, -511.328 )
-
-[node name="Shmoo12" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 993.862, -510.037 )
-
-[node name="Shmoo13" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1004.45, -512.969 )
-
-[node name="Shmoo14" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1106.57, -514.184 )
-
-[node name="Shmoo15" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1120.78, -512.627 )
-
-[node name="Shmoo16" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 1131.06, -514.552 )
-
-[node name="Shmoo17" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 1145.82, -512.448 )
-
-[node name="Shmoo18" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1163.06, -509.035 )
-
-[node name="Shmoo19" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1169.1, -510.458 )
-
-[node name="Shmoo20" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1180.96, -513.447 )
-
-[node name="Shmoo21" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1195.94, -510.682 )
-
-[node name="Shmoo22" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1208.96, -513.325 )
-
-[node name="Shmoo23" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1224.88, -509.453 )
-
-[node name="Shmoo24" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1238.35, -514.965 )
-
-[node name="Shmoo25" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1246.69, -510.785 )
-
-[node name="Shmoo26" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1261.64, -511.979 )
-
-[node name="Shmoo27" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1273.96, -510.786 )
-
-[node name="Shmoo28" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1285.75, -515.192 )
-
-[node name="Shmoo29" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1302.84, -515.776 )
-
-[node name="Shmoo30" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1312.51, -514.417 )
-
-[node name="Shmoo31" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1323.36, -511.224 )
-
-[node name="Shmoo32" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 1338.18, -512.079 )
-
-[node name="Shmoo33" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1354.37, -515.542 )
-
-[node name="Shmoo34" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1362.94, -514.422 )
-
-[node name="Shmoo35" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1374.86, -513.315 )
-
-[node name="Shmoo36" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1388.79, -514.72 )
-
-[node name="Shmoo37" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 272.235, -380.978 )
-
-[node name="Shmoo38" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 282.467, -380.204 )
-
-[node name="Shmoo39" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 299.239, -386.865 )
-
-[node name="Shmoo40" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 313.803, -384.308 )
-
-[node name="Shmoo41" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 327.292, -380.367 )
-
-[node name="Shmoo42" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 341.12, -385.512 )
-
-[node name="Shmoo43" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 352.565, -385.917 )
-
-[node name="Shmoo44" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 366.328, -386.159 )
-
-[node name="Shmoo45" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 9.0728, -323.936 )
-
-[node name="Shmoo46" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 18.2966, -316.844 )
-
-[node name="Shmoo47" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 30.8734, -322.241 )
-
-[node name="Shmoo48" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 43.2538, -316.601 )
-
-[node name="Shmoo49" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 54.2983, -317.021 )
-
-[node name="Shmoo50" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 70.2987, -316.756 )
-
-[node name="Shmoo51" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 82.3249, -318.004 )
-
-[node name="Shmoo52" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 95.8411, -318.335 )
-
-[node name="Shmoo53" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 108.167, -320.017 )
-
-[node name="Shmoo54" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 530.793, -322.822 )
-
-[node name="Shmoo55" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 540.263, -322.085 )
-
-[node name="Shmoo56" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 551.445, -323.245 )
-
-[node name="Shmoo57" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 571.842, -318.898 )
-
-[node name="Shmoo58" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 582.024, -321.458 )
-
-[node name="Shmoo59" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 600.497, -318.349 )
-
-[node name="Shmoo60" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 610.848, -319.716 )
-
-[node name="Shmoo61" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 625.756, -323.14 )
-
-[node name="Shmoo62" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1547.36, -69.0025 )
-
-[node name="Shmoo63" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1550.51, -82.5848 )
-
-[node name="Shmoo64" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1566.4, -90.8909 )
-
-[node name="Shmoo65" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 1574.56, -103.669 )
-
-[node name="Shmoo66" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1584.42, -120.25 )
-
-[node name="Shmoo67" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1592.54, -127.493 )
-
-[node name="Shmoo68" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( -183.331, -64.9375 )
-
-[node name="Shmoo69" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( -173.12, -51.3509 )
-
-[node name="Shmoo70" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( -163.839, -38.8494 )
-
-[node name="Shmoo71" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( -156.235, -31.6398 )
-
-[node name="Shmoo72" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( -145.8, -15.7563 )
-
-[node name="Shmoo73" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( -139.517, -5.40009 )
-
-[node name="Shmoo74" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 458.966, -61.7378 )
-
-[node name="Shmoo75" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 464.118, -63.7779 )
-
-[node name="Shmoo76" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 478.901, -66.0801 )
-
-[node name="Shmoo77" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 489.809, -64.4079 )
-
-[node name="Shmoo78" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 505.256, -66.3696 )
-
-[node name="Shmoo79" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 523.214, -64.1876 )
-
-[node name="Shmoo80" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 535.847, -65.05 )
-
-[node name="Shmoo81" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 542.922, -64.6102 )
-
-[node name="Shmoo82" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 552.458, -63.2544 )
-
-[node name="Shmoo83" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 570.771, -61.9948 )
-
-[node name="Shmoo84" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 581.972, -63.9105 )
-
-[node name="Shmoo85" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 599.468, -67.9165 )
-
-[node name="Shmoo86" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 605.127, -66.2739 )
-
-[node name="Shmoo87" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 620.035, -66.4511 )
-
-[node name="Shmoo88" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 629.192, -60.7271 )
-
-[node name="Shmoo89" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 775.778, -61.115 )
-
-[node name="Shmoo90" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 784.288, -64.0728 )
-
-[node name="Shmoo91" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 799.297, -67.8234 )
-
-[node name="Shmoo92" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 812.08, -65.0817 )
-
-[node name="Shmoo93" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 826.477, -66.0356 )
-
-[node name="Shmoo94" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 837.467, -64.4893 )
-
-[node name="Shmoo95" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 850.306, -66.4713 )
-
-[node name="Shmoo96" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 861.323, -65.705 )
-
-[node name="Shmoo97" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 872.627, -62.3757 )
-
-[node name="Shmoo98" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 885.32, -63.327 )
-
-[node name="Shmoo99" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 901.606, -65.017 )
-
-[node name="Shmoo100" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 913.572, -63.673 )
-
-[node name="Shmoo101" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 929.821, -60.0014 )
-
-[node name="Shmoo102" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 936.253, -60.2579 )
-
-[node name="Shmoo103" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 950.488, -61.6151 )
-
-[node name="Shmoo104" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 967.314, -66.9662 )
-
-[node name="Shmoo105" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 982.01, -66.853 )
-
-[node name="Shmoo106" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 990.447, -61.8765 )
-
-[node name="Shmoo107" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1007.41, -60.6025 )
-
-[node name="Shmoo108" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 1019.22, -64.0301 )
-
-[node name="Shmoo109" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1035.13, -63.9579 )
-
-[node name="Shmoo110" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 1047.59, -63.7599 )
-
-[node name="Shmoo111" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 1059.76, -60.7468 )
-
-[node name="Shmoo112" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1068.57, -63.9307 )
-
-[node name="Shmoo113" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1076.7, -61.5502 )
-
-[node name="Shmoo114" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 1093.81, -66.3245 )
-
-[node name="Shmoo115" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 1107.09, -65.9467 )
-
-[node name="Shmoo116" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1116.92, -61.7136 )
-
-[node name="Shmoo117" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1132.23, -64.4615 )
-
-[node name="Shmoo118" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1142.28, -65.1755 )
-
-[node name="Shmoo119" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1157.47, -63.832 )
-
-[node name="Shmoo120" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1171.94, -61.1607 )
-
-[node name="Shmoo121" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1185.72, -62.4313 )
-
-[node name="Shmoo122" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1193.47, -61.0051 )
-
-[node name="Shmoo123" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1206.89, -65.7241 )
-
-[node name="Shmoo124" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1220.01, -64.2413 )
-
-[node name="Shmoo125" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 1238.71, -66.778 )
-
-[node name="Shmoo126" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1246.15, -66.338 )
-
-[node name="Shmoo127" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1256.44, -63.8235 )
-
-[node name="Shmoo128" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 1269.51, -65.1904 )
-
-[node name="Shmoo129" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1291.77, -64.8342 )
-
-[node name="Shmoo130" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1303.13, -67.5091 )
-
-[node name="Shmoo131" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1308.67, -67.6102 )
-
-[node name="Shmoo132" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1327.16, -61.9416 )
-
-[node name="Shmoo133" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1335.57, -61.2194 )
-
-[node name="Shmoo134" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1351.45, -64.2009 )
-
-[node name="Shmoo135" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1367.99, -67.849 )
-
-[node name="Shmoo136" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 1379.24, -64.1543 )
-
-[node name="Shmoo137" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1384.35, -63.9259 )
-
-[node name="Shmoo138" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 1399.58, -60.8802 )
-
-[node name="Shmoo139" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1414.39, -64.848 )
-
-[node name="Shmoo140" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1430.38, -67.1856 )
-
-[node name="Shmoo141" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1442.41, -66.5707 )
-
-[node name="Shmoo142" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1452.56, -60.4274 )
-
-[node name="Shmoo143" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1464.56, -65.4274 )
-
-[node name="Shmoo144" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1478.55, -61.3591 )
-
-[node name="Shmoo145" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1489.17, -62.6858 )
-
-[node name="Shmoo146" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 1506.41, -64.6035 )
-
-[node name="Shmoo147" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1518.14, -65.4862 )
-
-[node name="Shmoo148" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 1524.37, -63.7615 )
-
-[node name="Shmoo149" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( -122.255, -1.95701 )
-
-[node name="Shmoo150" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( -110.299, 0.992574 )
-
-[node name="Shmoo151" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( -95.6976, -0.447331 )
-
-[node name="Shmoo152" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( -84.5038, 3.32811 )
-
-[node name="Shmoo153" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( -69.489, 2.17001 )
-
-[node name="Shmoo154" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( -56.117, 3.4309 )
-
-[node name="Shmoo155" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( -46.3416, 3.69996 )
-
-[node name="Shmoo156" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( -30.9608, -3.52185 )
-
-[node name="Shmoo157" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( -19.2297, 2.10959 )
-
-[node name="Shmoo158" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( -11.0543, 3.30607 )
-
-[node name="Shmoo159" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 7.08508, 1.18264 )
-
-[node name="Shmoo160" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 21.0536, -3.41572 )
-
-[node name="Shmoo161" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 31.228, -1.58797 )
-
-[node name="Shmoo162" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 40.6028, 2.07872 )
-
-[node name="Shmoo163" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 57.522, -3.77252 )
-
-[node name="Shmoo164" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 71.246, 2.73633 )
-
-[node name="Shmoo165" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 80.2769, -1.17546 )
-
-[node name="Shmoo166" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 93.7603, 1.07293 )
-
-[node name="Shmoo167" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 108.818, -0.0331156 )
-
-[node name="Shmoo168" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 123.145, -1.95048 )
-
-[node name="Shmoo169" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 133.172, 2.9381 )
-
-[node name="Shmoo170" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 142.411, 8.14082 )
-
-[node name="Shmoo171" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 155.763, 25.706 )
-
-[node name="Shmoo172" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 168.63, 32.1577 )
-
-[node name="Shmoo173" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 176.319, 47.4819 )
-
-[node name="Shmoo174" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 180.279, 55.0482 )
-
-[node name="Shmoo175" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 330.102, 59.3289 )
-
-[node name="Shmoo176" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 340.56, 47.1763 )
-
-[node name="Shmoo177" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 343.623, 34.2931 )
-
-[node name="Shmoo178" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 354.157, 20.165 )
-
-[node name="Shmoo179" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 364.505, 11.1507 )
-
-[node name="Shmoo180" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 374.543, -3.02569 )
-
-[node name="Shmoo181" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 389.419, 0.740469 )
-
-[node name="Shmoo182" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 406.005, 3.0286 )
-
-[node name="Shmoo183" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 413.199, 0.937725 )
-
-[node name="Shmoo184" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 430.155, -0.789068 )
-
-[node name="Shmoo185" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 437.99, 3.6783 )
-
-[node name="Shmoo186" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 201.828, 61.2473 )
-
-[node name="Shmoo187" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 212.855, 60.0757 )
-
-[node name="Shmoo188" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 224.691, 65.9814 )
-
-[node name="Shmoo189" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 235.176, 63.0421 )
-
-[node name="Shmoo190" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 245.893, 63.6418 )
-
-[node name="Shmoo191" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 260.609, 65.3686 )
-
-[node name="Shmoo192" parent="World/ShmooHolder" instance=ExtResource( 15 )]
-position = Vector2( 272.819, 66.5998 )
-
-[node name="Shmoo193" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 290.352, 65.8588 )
-
-[node name="Shmoo194" parent="World/ShmooHolder" instance=ExtResource( 11 )]
-position = Vector2( 301.625, 61.1648 )
-
-[node name="Shmoo195" parent="World/ShmooHolder" instance=ExtResource( 14 )]
-position = Vector2( 309.937, 64.6228 )
+[node name="Shmoo1" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 848.505, -512.248 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo2" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 887.526, -511.98 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo3" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 904.224, -512.128 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo4" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 1104.99, -511.856 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo5" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 1143.13, -512.511 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo6" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 1172.91, -511.64 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo7" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 1195.8, -511.271 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo8" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 1236.68, -512.743 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo9" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 1260.97, -512.369 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo10" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 1299.94, -512.159 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo11" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 1323.84, -511.378 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo12" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 1352.76, -511.527 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo13" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 271.636, -384.943 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo14" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 311.624, -384.151 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo15" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 328.339, -383.969 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo16" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 20.1462, -320.282 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo17" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 43.652, -319.322 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo18" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 72.037, -319.016 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo19" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 527.515, -319.982 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo20" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 567.402, -320.486 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo21" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 584.781, -319.613 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo22" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 840.635, -72.2583 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo23" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 849.328, -82.5505 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo24" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 858.318, -94.0873 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo25" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 878.78, -117.747 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo26" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 887.432, -127.228 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo27" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 922.767, -106.544 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo28" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 951.959, -71.4911 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo29" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 1159.48, -128.17 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo30" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 1184.65, -128.903 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo31" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 1242.76, -105.788 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo32" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 1272.37, -72.2317 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo33" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 1544.5, -71.7568 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo34" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 1552.74, -82.9116 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo35" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 1563.63, -93.5808 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo36" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 1582.52, -117.114 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo37" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 1592.49, -127.241 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo38" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( -164.849, -42.4498 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo39" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( -135.805, -7.48805 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo40" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 456.311, -63.4909 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo41" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 480.735, -64.5039 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo42" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 543.488, -64.3759 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo43" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 567.183, -63.9102 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo44" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 584.094, -64.0363 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo45" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 595.819, -64.7516 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo46" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 775.462, -64.2958 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo47" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 800.857, -64.6647 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo48" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 992.042, -63.4396 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo49" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 1015.48, -63.7978 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo50" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 1056.53, -64.8825 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo51" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 1080.8, -64.4213 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo52" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 1120.04, -64.182 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo53" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 1143.37, -64.2303 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo54" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 1311.92, -63.7268 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo55" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 1336.49, -64.5718 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo56" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 1376.81, -64.6853 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo57" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 1399.03, -63.031 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo58" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 1440.98, -64.3848 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo59" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 1464.21, -64.0454 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo60" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 1504.81, -64.2341 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo61" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 1528.62, -63.9534 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo62" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( -96.052, 0.534227 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo63" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( -71.0877, -0.286151 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo64" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( -31.4497, -0.740785 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo65" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( -8.51474, 0.96121 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo66" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 32.9185, -0.57557 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo67" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 55.3925, -0.281775 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo68" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 96.8043, -0.737336 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo69" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 120.233, -0.524309 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo70" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 156.116, 23.1413 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo71" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 183.978, 56.6046 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo72" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 328.632, 55.8486 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo73" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 336.63, 45.4892 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo74" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 347.211, 34.3833 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo75" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 366.562, 10.8557 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo76" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 375.844, 0.0287393 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo77" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 416.802, -0.58504 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo78" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 439.178, -0.854285 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo79" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 14 )]
+position = Vector2( 223.212, 64.9726 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo80" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 248.716, 64.8443 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo81" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 11 )]
+position = Vector2( 287.039, 64.9723 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
+
+[node name="Shmoo82" type="Area2D" parent="World/ShmooHolder" instance=ExtResource( 15 )]
+position = Vector2( 312.977, 64.9416 )
+z_index = 1
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 39 )
+popStreams = [ ExtResource( 42 ), ExtResource( 46 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 40 ) ]
 
 [node name="Scenery" type="Node2D" parent="World"]
 
 [node name="Water" type="Sprite" parent="World/Scenery"]
-position = Vector2( 712, -435 )
+position = Vector2( 703, -457 )
 scale = Vector2( 27.9844, 18.3281 )
 z_index = -10
 texture = SubResource( 2 )
@@ -699,6 +792,9 @@ collision_layer = 4
 collision_mask = 4
 gravity_vec = Vector2( 0, -1 )
 script = ExtResource( 30 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="World/Scenery/Bubbler"]
 position = Vector2( 0, -144 )
@@ -708,11 +804,14 @@ max_distance = 500.0
 bus = "Effects"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Scenery/Bubbler"]
-position = Vector2( -0.5, -157 )
+position = Vector2( 0, -157 )
 shape = SubResource( 4 )
 
 [node name="Bubbler" type="Sprite" parent="World/Scenery/Bubbler"]
 texture = ExtResource( 28 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="World/Scenery/Bubbler/Bubbler"]
 modulate = Color( 1, 1, 1, 0.501961 )
@@ -736,6 +835,65 @@ texture = ExtResource( 26 )
 
 [node name="Chest" parent="World/Scenery" instance=ExtResource( 27 )]
 
+[node name="Heater" type="Node2D" parent="World/Scenery"]
+position = Vector2( 1024, -387 )
+script = ExtResource( 38 )
+dialPath = NodePath("Dial")
+gaugePath = NodePath("Control/Gauge")
+
+[node name="Sprite" type="Sprite" parent="World/Scenery/Heater"]
+position = Vector2( 3, 98 )
+texture = ExtResource( 24 )
+
+[node name="HeaterBody" type="StaticBody2D" parent="World/Scenery/Heater"]
+position = Vector2( 3, 76 )
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Scenery/Heater/HeaterBody"]
+position = Vector2( 0, 22 )
+shape = SubResource( 8 )
+
+[node name="Dial" type="KinematicBody2D" parent="World/Scenery/Heater"]
+position = Vector2( 31, 92 )
+script = ExtResource( 45 )
+minY = 8.0
+maxY = 176.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Scenery/Heater/Dial"]
+position = Vector2( 7, 0 )
+shape = SubResource( 6 )
+
+[node name="Sprite" type="Sprite" parent="World/Scenery/Heater/Dial"]
+texture = ExtResource( 44 )
+
+[node name="BottomHit" type="Area2D" parent="World/Scenery/Heater/Dial"]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Scenery/Heater/Dial/BottomHit"]
+position = Vector2( 9, 10 )
+shape = SubResource( 7 )
+
+[node name="TopHit" type="Area2D" parent="World/Scenery/Heater/Dial"]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Scenery/Heater/Dial/TopHit"]
+position = Vector2( 9, -10 )
+shape = SubResource( 7 )
+
+[node name="Control" type="Control" parent="World/Scenery/Heater"]
+margin_left = -10.0
+margin_top = 1.0
+margin_right = 8.0
+margin_bottom = 188.0
+
+[node name="Gauge" type="ColorRect" parent="World/Scenery/Heater/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="HUD" type="Control" parent="CanvasLayer"]
@@ -749,6 +907,7 @@ fish1BarPath = NodePath("Healthbars/VBoxContainer/Fish1")
 fish2BarPath = NodePath("Healthbars/VBoxContainer/Fish2")
 fish3BarPath = NodePath("Healthbars/VBoxContainer/Fish3")
 shmooBarPath = NodePath("Progressbars/VBoxContainer/Shmoobar")
+heaterBarPath = NodePath("Progressbars/VBoxContainer/Tempbar")
 deadFishTexture = ExtResource( 18 )
 liveFishTexture = ExtResource( 16 )
 hatUnlockPath = NodePath("HatUnlock")
@@ -760,53 +919,63 @@ theme = ExtResource( 6 )
 custom_styles/panel = ExtResource( 22 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HUD/Healthbars"]
-margin_right = 126.0
+margin_right = 130.0
 margin_bottom = 92.0
+rect_min_size = Vector2( 130, 0 )
 custom_constants/separation = 4
 alignment = 1
 
 [node name="Float" parent="CanvasLayer/HUD/Healthbars/VBoxContainer" instance=ExtResource( 8 )]
-margin_right = 126.0
+margin_right = 130.0
+barColor = Color( 0.109804, 0.780392, 1, 1 )
 
 [node name="Fish1" parent="CanvasLayer/HUD/Healthbars/VBoxContainer" instance=ExtResource( 8 )]
 margin_top = 24.0
-margin_right = 126.0
+margin_right = 130.0
 margin_bottom = 44.0
-barStyle = ExtResource( 17 )
+barColor = Color( 0.913725, 0.0666667, 0.121569, 1 )
 iconTexture = ExtResource( 16 )
 
 [node name="Fish2" parent="CanvasLayer/HUD/Healthbars/VBoxContainer" instance=ExtResource( 8 )]
 margin_top = 48.0
-margin_right = 126.0
+margin_right = 130.0
 margin_bottom = 68.0
-barStyle = ExtResource( 17 )
+barColor = Color( 0.913725, 0.0666667, 0.121569, 1 )
 iconTexture = ExtResource( 16 )
 
 [node name="Fish3" parent="CanvasLayer/HUD/Healthbars/VBoxContainer" instance=ExtResource( 8 )]
 margin_top = 72.0
-margin_right = 126.0
+margin_right = 130.0
 margin_bottom = 92.0
-barStyle = ExtResource( 17 )
+barColor = Color( 0.913725, 0.0666667, 0.121569, 1 )
 iconTexture = ExtResource( 16 )
 
 [node name="Progressbars" type="PanelContainer" parent="CanvasLayer/HUD"]
-margin_left = 503.0
+margin_left = 500.0
 margin_top = 10.0
-margin_right = 629.0
+margin_right = 630.0
 margin_bottom = 30.0
 theme = ExtResource( 6 )
 custom_styles/panel = ExtResource( 22 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HUD/Progressbars"]
-margin_right = 126.0
-margin_bottom = 20.0
+margin_right = 130.0
+margin_bottom = 44.0
+rect_min_size = Vector2( 130, 0 )
 custom_constants/separation = 4
 alignment = 1
 
 [node name="Shmoobar" parent="CanvasLayer/HUD/Progressbars/VBoxContainer" instance=ExtResource( 8 )]
-margin_right = 126.0
-barStyle = ExtResource( 24 )
+margin_right = 130.0
+barColor = Color( 0.0784314, 0.627451, 0.180392, 1 )
 iconTexture = ExtResource( 23 )
+
+[node name="Tempbar" parent="CanvasLayer/HUD/Progressbars/VBoxContainer" instance=ExtResource( 8 )]
+margin_top = 24.0
+margin_right = 130.0
+margin_bottom = 44.0
+barColor = Color( 0.0784314, 0.627451, 0.180392, 1 )
+iconTexture = ExtResource( 17 )
 
 [node name="HatUnlock" type="TextureRect" parent="CanvasLayer/HUD"]
 visible = false
@@ -989,6 +1158,10 @@ bus = "Effects"
 [connection signal="ShmooCountChanged" from="World/ShmooHolder" to="." method="OnShmooCountChanged"]
 [connection signal="body_entered" from="World/Scenery/Bubbler" to="World/Scenery/Bubbler" method="OnBodyEntered"]
 [connection signal="body_exited" from="World/Scenery/Bubbler" to="World/Scenery/Bubbler" method="OnBodyExited"]
+[connection signal="body_entered" from="World/Scenery/Heater/Dial/BottomHit" to="World/Scenery/Heater/Dial" method="OnBodyEntered" binds= [ false ]]
+[connection signal="body_exited" from="World/Scenery/Heater/Dial/BottomHit" to="World/Scenery/Heater/Dial" method="OnBodyExited" binds= [ false ]]
+[connection signal="body_entered" from="World/Scenery/Heater/Dial/TopHit" to="World/Scenery/Heater/Dial" method="OnBodyEntered" binds= [ true ]]
+[connection signal="body_exited" from="World/Scenery/Heater/Dial/TopHit" to="World/Scenery/Heater/Dial" method="OnBodyExited" binds= [ true ]]
 [connection signal="pressed" from="CanvasLayer/PauseOverlay/PauseMenu/VBoxContainer/Resume" to="CanvasLayer/PauseOverlay" method="OnResumeClick"]
 [connection signal="pressed" from="CanvasLayer/PauseOverlay/PauseMenu/VBoxContainer/Restart" to="CanvasLayer/PauseOverlay" method="OnRestartClick"]
 [connection signal="pressed" from="CanvasLayer/PauseOverlay/PauseMenu/VBoxContainer/Exit" to="CanvasLayer/PauseOverlay" method="OnExitClick"]

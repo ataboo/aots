@@ -21,10 +21,10 @@ public class SnailControl : KinematicBody2D
     public float speed = 120f;
 
     [Export]
-    public float floatVelocity = 80f;
+    public float floatVelocity = 220f;
 
     [Export]
-    public float floatAccel = 0.1f;
+    public float floatAccel = 0.4f;
 
     [Export]
     public float gravity = 200f;
@@ -39,10 +39,10 @@ public class SnailControl : KinematicBody2D
     public float accel = 0.25f;
 
     [Export]
-    public float wallStick = 200f;
+    public float wallStick = 100;
 
     [Export]
-    public float floatCapacity = 1.8f;
+    public float floatCapacity = 2.5f;
 
     [Export]
     public float floatRechargeFactor = 0.75f;
@@ -124,7 +124,7 @@ public class SnailControl : KinematicBody2D
         if(_state.floating) {
             _state.velocity.y = Mathf.Lerp(_state.velocity.y, -floatVelocity, floatAccel);
         } else {
-            if(!_state.onFloor && !_state.onWall) {
+            if(_state.lastFloorNormal == null) {
                 _state.velocity.y += gravity * delta;
             }
 
@@ -135,9 +135,9 @@ public class SnailControl : KinematicBody2D
                     _state.velocity.y = Mathf.Lerp(_state.velocity.y, 0, friction);
                 }
             }
-            if(!InBubbles && (_state.onWall || _state.onFloor)) {
-                if(((Vector2)_state.floorNormal).x != _state.input.x) {
-                    _state.velocity -= (Vector2)_state.floorNormal * wallStick;
+            if(!InBubbles && _state.lastFloorNormal != null) {
+                if(((Vector2)_state.lastFloorNormal).x != _state.input.x) {
+                    _state.velocity -= (Vector2)_state.lastFloorNormal * wallStick;
                 }
             }
         }
@@ -158,11 +158,20 @@ public class SnailControl : KinematicBody2D
         if(_state.floorNormal != null && ((Vector2)_state.floorNormal).y > 0) {
             _state.floorNormal = null;
         }
+
         _state.onFloor = _state.floorNormal != null && ((Vector2)_state.floorNormal).y < -0.2f;
         _state.onWall = _state.floorNormal != null && !_state.onFloor;
 
         _state.leftWallInRange = _leftWallDetector.GetOverlappingBodies().Count > 0;
         _state.rightWallInRange = _rightWallDetector.GetOverlappingBodies().Count > 0;
+
+        if(_state.floorNormal != null) {
+            _state.lastFloorNormal = _state.floorNormal;
+        }
+
+        if(!_state.leftWallInRange && !_state.rightWallInRange) {
+            _state.lastFloorNormal = null;
+        }
 
         _snailSprite.UpdateSnailSprite(_state);
     }

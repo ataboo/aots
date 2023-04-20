@@ -12,7 +12,11 @@ public class LevelState: Godot.Object {
 
     public FishState fish3;
 
+    public float temperature;
+    
     public float shmooDamageRate;
+
+    public float tempDamageRate;
 
     public bool WonGame() {
         return shmooCount.count == 0;
