@@ -22,7 +22,10 @@ public class GameManager : Node2D
             equippedHat = -1,
             hatUnlocks = new bool[]{
                 false, // Pilgrim 
-                true   // Fez
+                false, // Fez
+                false, // Horns
+                false, // Beret
+                false, // Cowboy
             },
         };
     }
@@ -56,7 +59,13 @@ public class GameManager : Node2D
         }
     }
 
-    public void OnChestOpened(int chestId) {
-        _gameState.hatUnlocks[chestId] = true;
+    public bool UnlockHat(int hatId) {
+        if(_gameState.hatUnlocks[hatId]) {
+            return false;
+        }
+
+        _gameState.hatUnlocks[hatId] = true;
+
+        return true;
     }
 }

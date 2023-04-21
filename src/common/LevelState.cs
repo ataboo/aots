@@ -39,4 +39,5 @@ public class FishState {
     public float health;
     public float initialHealth;
     public float HealthProgress => Mathf.Clamp(health / initialHealth, 0, 1);
+    public bool justDied;
 }

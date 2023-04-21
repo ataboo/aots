@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using static Enums;
 
 public class HUDControl : Control
 {
@@ -36,6 +37,15 @@ public class HUDControl : Control
     private HealthBarControl _shmooBar;
     private HealthBarControl _heaterBar;
 
+    [Export] Texture bettasLg;
+    [Export] Texture bettasDeadLg;
+
+    [Export] Texture shrimpLg;
+    [Export] Texture shrimpDeadLg;
+
+    [Export] Texture blueLg;
+    [Export] Texture blueDeadLg;
+
     private bool heaterInit = false;
 
     public override void _Ready()
@@ -64,21 +74,39 @@ public class HUDControl : Control
             _heaterBar.Visible = true;       
         }
 
-        _heaterBar.SetLevel(levelState.temperature, levelState.temperature.ColorForTemperature());
+        _heaterBar.SetLevel(levelState.temperature, levelState.temperature.ColorForImbalance(0.5f));
     }
     
     private void UpdateFishHealth(HealthBarControl healthBar, FishState fishState) {
-        healthBar.SetLevel(fishState.HealthProgress);
-        if(fishState.health == 0) {
-            healthBar.SetIcon(TextureForFish(fishState));
+        healthBar.SetLevel(fishState.HealthProgress, fishState.HealthProgress.ColorForImbalance(1.0f));
+        if(fishState.justDied) {
+            healthBar.SetIcon(SmallTextureForFish(fishState));
         }
     }
 
-    public Texture TextureForFish(FishState fish) {
-        if(fish.health == 0) {
-            return deadFishTexture;
-        } else {
-            return liveFishTexture;
+    public Texture LargeTextureForFish(FishState fish) {
+        switch(fish.fishType) {
+            case FishType.Bettas:
+                return fish.health > 0 ? bettasLg : bettasDeadLg;
+            case FishType.Shrimp:
+                return fish.health > 0 ? shrimpLg : shrimpDeadLg;
+            case FishType.Blue:
+                return fish.health > 0 ? blueLg : blueDeadLg;
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+    public Texture SmallTextureForFish(FishState fish) {
+        switch(fish.fishType) {
+            case FishType.Bettas:
+                return fish.health > 0 ? liveFishTexture : deadFishTexture;
+            case FishType.Shrimp:
+                return fish.health > 0 ? liveFishTexture : deadFishTexture;
+            case FishType.Blue:
+                return fish.health > 0 ? liveFishTexture : deadFishTexture;
+            default:
+                throw new NotImplementedException();
         }
     }
 

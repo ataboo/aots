@@ -22,6 +22,10 @@ public class VictoryMenuControl : Panel
 
     private AudioStreamPlayer _victoryPlayer;
 
+    [Export]
+    public NodePath roarControlPath;
+    private RoarControl _roarControl;
+
     [Export] public AudioStream liveSound;
 
     [Export] public AudioStream deadSound;
@@ -51,6 +55,7 @@ public class VictoryMenuControl : Panel
         _nextButton = GetNode<Button>(nextButtonPath) ?? throw new NullReferenceException();
         _victoryPlayer = GetNode<AudioStreamPlayer>(victoryPlayerPath) ?? throw new NullReferenceException();
         _gameManager = GetNode<GameManager>("/root/GameManager");
+        _roarControl = GetNode<RoarControl>(roarControlPath) ?? throw new NullReferenceException();
     }
 
     async public Task ShowVictory(LevelState state) {
@@ -63,6 +68,10 @@ public class VictoryMenuControl : Panel
 
         GetTree().Paused = true;
         Visible = true;
+
+        var perfect = _levelState.fish1.health > 0 && _levelState.fish2.health > 0 && _levelState.fish3.health > 0;
+
+        await ToSignal(GetTree().CreateTimer(1f), "timeout");
 
         ShowFishResult(_fish1Texture, state.fish1);
 
@@ -80,10 +89,16 @@ public class VictoryMenuControl : Panel
 
         _victoryPlayer.Stream = state.WonGame() ? winSound : loseSound;
         _victoryPlayer.Play();
+
+        if(perfect) {
+            _roarControl.PlayRoar();
+        }
+
+
     }
 
     private void ShowFishResult(TextureRect rect, FishState fishState) {
-       rect.Texture = _hudControl.TextureForFish(fishState);
+       rect.Texture = _hudControl.LargeTextureForFish(fishState);
        _victoryPlayer.Stream = fishState.health > 0 ? liveSound : deadSound;
        _victoryPlayer.Play();
 

@@ -1,0 +1,185 @@
+{ "frames": {
+   "snail-roar 0.aseprite": {
+    "frame": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 1.aseprite": {
+    "frame": { "x": 72, "y": 0, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 2.aseprite": {
+    "frame": { "x": 144, "y": 0, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 3.aseprite": {
+    "frame": { "x": 0, "y": 72, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 4.aseprite": {
+    "frame": { "x": 72, "y": 72, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 5.aseprite": {
+    "frame": { "x": 0, "y": 72, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 6.aseprite": {
+    "frame": { "x": 144, "y": 0, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 7.aseprite": {
+    "frame": { "x": 0, "y": 72, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 8.aseprite": {
+    "frame": { "x": 72, "y": 72, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 9.aseprite": {
+    "frame": { "x": 0, "y": 72, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 10.aseprite": {
+    "frame": { "x": 144, "y": 0, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 11.aseprite": {
+    "frame": { "x": 0, "y": 72, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 12.aseprite": {
+    "frame": { "x": 72, "y": 72, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 13.aseprite": {
+    "frame": { "x": 0, "y": 72, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 14.aseprite": {
+    "frame": { "x": 144, "y": 0, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 15.aseprite": {
+    "frame": { "x": 0, "y": 72, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 16.aseprite": {
+    "frame": { "x": 72, "y": 72, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 17.aseprite": {
+    "frame": { "x": 0, "y": 72, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 18.aseprite": {
+    "frame": { "x": 144, "y": 0, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 19.aseprite": {
+    "frame": { "x": 72, "y": 0, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   },
+   "snail-roar 20.aseprite": {
+    "frame": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "sourceSize": { "w": 72, "h": 72 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.3-rc2-x64",
+  "format": "RGBA8888",
+  "size": { "w": 216, "h": 144 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

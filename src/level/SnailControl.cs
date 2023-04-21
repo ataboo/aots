@@ -52,6 +52,8 @@ public class SnailControl : KinematicBody2D
 
     [Export] AudioStream dieSound;
 
+    [Export] AudioStream inflateSound;
+
     private SnailState _state = new SnailState();
 
     public SnailState SnailState => _state;
@@ -104,7 +106,15 @@ public class SnailControl : KinematicBody2D
         if(Input.IsActionPressed("move_down")) {
             _state.input += Vector2.Down;
         }
-        _state.floatInput = Input.IsActionPressed("jump");
+
+        var jumping = Input.IsActionPressed("jump");
+        var justJumped = !_state.floatInput && jumping;
+        _state.floatInput = jumping;
+
+        if(justJumped && _state.floatTime > 0) {
+            _snailAudio.Stream = inflateSound;
+            _snailAudio.Play();
+        }
 
         if(_state.floatInput) {
             _state.floatTime -= delta;
@@ -149,9 +159,7 @@ public class SnailControl : KinematicBody2D
         _state.velocity = MoveAndSlide(_state.velocity, Vector2.Up, stopOnSlope: true);
 
         if(CollidedWithHazard()) {
-            _snailAudio.Stream = dieSound;
-            _snailAudio.Play();
-            RestartLevel();
+            KillSnail();
         }
         
         _state.floorNormal = GetLastSlideCollision()?.Normal;
@@ -183,6 +191,12 @@ public class SnailControl : KinematicBody2D
         }
         
         return false;
+    }
+
+    public void KillSnail() {
+        _snailAudio.Stream = dieSound;
+        _snailAudio.Play();
+        RestartLevel();
     }
 
     private void RestartLevel() {

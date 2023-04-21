@@ -20,6 +20,18 @@ public class SnailSpriteControl : Node2D
     public NodePath[] hat2Paths;
     private Sprite[] _hat2Sprites;
 
+    [Export]
+    public NodePath[] hat3Paths;
+    private Sprite[] _hat3Sprites;
+
+    [Export]
+    public NodePath[] hat4Paths;
+    private Sprite[] _hat4Sprites;
+
+    [Export]
+    public NodePath[] hat5Paths;
+    private Sprite[] _hat5Sprites;
+
     private Node2D _parent;
 
     [Export]
@@ -53,6 +65,9 @@ public class SnailSpriteControl : Node2D
 
         _hat1Sprites = hat1Paths.Select(p => GetNode<Sprite>(p) ?? throw new NullReferenceException()).ToArray();
         _hat2Sprites = hat2Paths.Select(p => GetNode<Sprite>(p) ?? throw new NullReferenceException()).ToArray();
+        _hat3Sprites = hat3Paths.Select(p => GetNode<Sprite>(p) ?? throw new NullReferenceException()).ToArray();
+        _hat4Sprites = hat4Paths.Select(p => GetNode<Sprite>(p) ?? throw new NullReferenceException()).ToArray();
+        _hat5Sprites = hat5Paths.Select(p => GetNode<Sprite>(p) ?? throw new NullReferenceException()).ToArray();
 
         _hat90BaseStartPos = _hat90Base.Position;
         _hat45BaseStartPos = _hat45Base.Position;
@@ -122,6 +137,8 @@ public class SnailSpriteControl : Node2D
                 _snailSprite.FlipH = flipFloat;
                 _hat90Base.Position = new Vector2(flipFloat ? -_hat90BaseStartPos.x : _hat90BaseStartPos.x, _hat90BaseStartPos.y);
                 _snailSprite.Rotation = 0;
+                _hat90Base.Visible = true;
+                _hat45Base.Visible = false;
                 return;
             }
         } else {
@@ -172,26 +189,22 @@ public class SnailSpriteControl : Node2D
             case 1:
             case 2:
                 _snailSprite.Rotation = 0;
-                _hat45Base.Rotation = 0;
                 _hat45Base.Scale = new Vector2(1, 1);
                 break;
             case -5:
             case -6:
                 _snailSprite.Rotation = -Mathf.Pi/2f;
-                _hat45Base.Rotation = -Mathf.Pi / 2f;
-                _hat45Base.Scale = new Vector2(-1, -1);
+                _hat45Base.Scale = new Vector2(-1, 1);
                 flipH = true;
                 break;
             case -1:
             case -2:
                 _snailSprite.Rotation = Mathf.Pi/2f;
-                _hat45Base.Rotation = Mathf.Pi / 2f;
-                _hat45Base.Scale = new Vector2(1, -1);
+                _hat45Base.Scale = new Vector2(1, 1);
                 break;
             case 5:
             case 6:
                 _snailSprite.Rotation = 0;
-                _hat45Base.Rotation = 0;
                 _hat45Base.Scale = new Vector2(-1, 1);
                 flipH = true;
                 break;
@@ -241,7 +254,11 @@ public class SnailSpriteControl : Node2D
     }
 
     private void HideAllHats() {
-        var allHats = _hat1Sprites.Concat(_hat2Sprites);
+        var allHats = _hat1Sprites
+            .Concat(_hat2Sprites)
+            .Concat(_hat3Sprites)
+            .Concat(_hat4Sprites)
+            .Concat(_hat5Sprites);
         foreach(var s in allHats) {
             s.Visible = false;
         }
@@ -268,6 +285,15 @@ public class SnailSpriteControl : Node2D
                 break;
             case 1:
                 hatSprites = _hat2Sprites;
+                break;
+            case 2:
+                hatSprites = _hat3Sprites;
+                break;
+            case 3:
+                hatSprites = _hat4Sprites;
+                break;
+            case 4:
+                hatSprites = _hat5Sprites;
                 break;
             default:
                 throw new NotSupportedException();

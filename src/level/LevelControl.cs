@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 using static Enums;
 
 public class LevelControl : Node2D
@@ -33,6 +34,14 @@ public class LevelControl : Node2D
 
 	[Export] AudioStream fishDieSound;
 
+	[Export] NodePath[] bettaFishPath;
+	private FishControl[] _bettaFish;
+
+	[Export] NodePath shrimpPath;
+	private FishControl _shrimp;
+
+	[Export] NodePath blueFishPath;
+	private FishControl _blueFish;
 
 	public override void _Ready()
 	{
@@ -41,6 +50,9 @@ public class LevelControl : Node2D
 		_victoryMenu = GetNode<VictoryMenuControl>(victoryMenuPath) ?? throw new NullReferenceException();
 		_soundPlayer = GetNode<AudioStreamPlayer>(soundPlayerPath) ?? throw new NullReferenceException();
 		_heater = GetNode<HeaterControl>(heaterPath) ?? throw new NullReferenceException();
+		_bettaFish = bettaFishPath.Select(p => GetNode<FishControl>(p)).ToArray();
+		_shrimp = GetNode<FishControl>(shrimpPath) ?? throw new NullReferenceException();
+		_blueFish = GetNode<FishControl>(blueFishPath) ?? throw new NullReferenceException();
 
 		_startPosition = _snailControl.Position;
 
@@ -66,6 +78,14 @@ public class LevelControl : Node2D
 		_state.shmooCount = shmooCount;
 
 		if(_state.WonGame()) {
+			if(_state.fish1.health > 0 && _state.fish2.health > 0 && _state.fish3.health > 0) {
+				switch(levelIndex) {
+					case 0:
+						OnHatUnlocked(1);
+						break;
+				}
+			}
+
 			_victoryMenu.ShowVictory(_state);
 		}
 	}
@@ -75,17 +95,17 @@ public class LevelControl : Node2D
 		_state = new LevelState() {
 			levelIndex = levelIndex,
 			fish1 = new FishState(){
-				fishType = FishType.Puffer,
+				fishType = FishType.Bettas,
 				health = startingStats.fish1Health,
 				initialHealth = startingStats.fish1Health
 			},
 			fish2 = new FishState(){
-				fishType = FishType.Betta,
+				fishType = FishType.Shrimp,
 				health = startingStats.fish2Health,
 				initialHealth = startingStats.fish2Health
 			},
 			fish3 = new FishState(){
-				fishType = FishType.Shrimp,
+				fishType = FishType.Blue,
 				health = startingStats.fish3Health,
 				initialHealth = startingStats.fish3Health
 			},
@@ -122,9 +142,24 @@ public class LevelControl : Node2D
 			fish.health = Mathf.Max(0, fish.health - damage);
 
 			if(fish.health == 0) {
+				fish.justDied = true;
 				_soundPlayer.Stream = fishDieSound;
 				_soundPlayer.Play();
 			}
+		}
+
+		if(_state.fish1.justDied) {
+			foreach(var betta in _bettaFish) {
+				betta.KillFish();
+			}
+		}
+
+		if(_state.fish2.justDied) {
+			_shrimp.KillFish();
+		}
+
+		if(_state.fish3.justDied) {
+			_blueFish.KillFish();
 		}
 
 		if(_state.LostGame()) {
@@ -132,9 +167,10 @@ public class LevelControl : Node2D
 		}
 	}
 
-    public void OnChestOpened(int chestId)
+    public void OnHatUnlocked(int hatId)
     {
-		_hudControl.ShowHatUnlock(chestId);
-		_gameManager.OnChestOpened(chestId);
+		if(_gameManager.UnlockHat(hatId)) {
+			_hudControl.ShowHatUnlock(hatId);
+		}
     }
 }

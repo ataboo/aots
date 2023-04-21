@@ -13,10 +13,13 @@ public static class GodotExtensions {
         return col[idx];
     }
 
-    public static Color ColorForTemperature(this float temp) {
-        temp = Mathf.Clamp(temp, 0, 1);
+    public static Color ColorForImbalance(this float value, float balancePoint = 0.5f) {
+        value = Mathf.Clamp(value, 0, 1);
+        balancePoint = Mathf.Clamp(balancePoint, 0, 1);
 
-        var imbalance = Mathf.Abs((temp - 0.5f) * 2);
+        var maxImbalance = Mathf.Max(balancePoint, 1 - balancePoint);
+
+        var imbalance = Mathf.Abs((value - balancePoint)) / maxImbalance;
 
         return BalanceColor.LinearInterpolate(ImbalanceColor, imbalance);
     }

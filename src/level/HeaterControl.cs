@@ -21,7 +21,7 @@ public class HeaterControl : Node2D
     public void UpdateGauge(float temp) {
         _gaugeRect.MarginTop = (1-temp) * _initialGaugeHeight;
 
-        _gaugeRect.Color = temp.ColorForTemperature();
+        _gaugeRect.Color = temp.ColorForImbalance();
     }
 
     public float DialLevel() => _dialControl?.Level() ?? 0.5f;

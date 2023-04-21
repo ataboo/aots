@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/underwater_yell.ogg-8172c3d8696c7e4717ab69ff2c9d8796.oggstr"
+
+[deps]
+
+source_file="res://audio/effects/underwater_yell.ogg"
+dest_files=[ "res://.import/underwater_yell.ogg-8172c3d8696c7e4717ab69ff2c9d8796.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

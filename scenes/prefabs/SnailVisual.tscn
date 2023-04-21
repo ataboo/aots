@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://src/level/SnailSpriteControl.cs" type="Script" id=1]
 [ext_resource path="res://textures/hats/pilgrim_45.png" type="Texture" id=2]
@@ -10,6 +10,12 @@
 [ext_resource path="res://textures/characters/snail_float.png" type="Texture" id=8]
 [ext_resource path="res://textures/characters/snail_still45-Sheet.png" type="Texture" id=9]
 [ext_resource path="res://textures/characters/snail_eat45-Sheet.png" type="Texture" id=10]
+[ext_resource path="res://textures/hats/horns_45.png" type="Texture" id=11]
+[ext_resource path="res://textures/hats/horns_90.png" type="Texture" id=12]
+[ext_resource path="res://textures/hats/beret_90.png" type="Texture" id=13]
+[ext_resource path="res://textures/hats/beret_45.png" type="Texture" id=14]
+[ext_resource path="res://textures/hats/cowboy_90.png" type="Texture" id=15]
+[ext_resource path="res://textures/hats/cowboy_45.png" type="Texture" id=16]
 
 [sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 9 )
@@ -114,6 +120,9 @@ script = ExtResource( 1 )
 snailSpritePath = NodePath("SnailSprite")
 hat1Paths = [ NodePath("SnailSprite/Hats90/PilgrimHat"), NodePath("SnailSprite/Hats45/Pilgrim45") ]
 hat2Paths = [ NodePath("SnailSprite/Hats90/FezHat"), NodePath("SnailSprite/Hats45/Fez45") ]
+hat3Paths = [ NodePath("SnailSprite/Hats90/HornsHat"), NodePath("SnailSprite/Hats45/Horns45") ]
+hat4Paths = [ NodePath("SnailSprite/Hats90/BeretHat"), NodePath("SnailSprite/Hats45/Beret45") ]
+hat5Paths = [ NodePath("SnailSprite/Hats45/Cowboy45"), NodePath("SnailSprite/Hats90/CowboyHat") ]
 hat90BasePath = NodePath("SnailSprite/Hats90")
 hat45BasePath = NodePath("SnailSprite/Hats45")
 blinkTimerPath = NodePath("BlinkTimer")
@@ -123,27 +132,60 @@ frames = SubResource( 1 )
 animation = "still90"
 
 [node name="Hats45" type="Node2D" parent="SnailSprite"]
-position = Vector2( -17, -13 )
 
 [node name="Pilgrim45" type="Sprite" parent="SnailSprite/Hats45"]
 visible = false
+position = Vector2( -18, -13 )
 texture = ExtResource( 2 )
 
 [node name="Fez45" type="Sprite" parent="SnailSprite/Hats45"]
 visible = false
-position = Vector2( -3, -2 )
+position = Vector2( -20, -15 )
 texture = ExtResource( 6 )
 
+[node name="Horns45" type="Sprite" parent="SnailSprite/Hats45"]
+visible = false
+position = Vector2( -20, -15 )
+texture = ExtResource( 11 )
+offset = Vector2( -3, -2 )
+
+[node name="Beret45" type="Sprite" parent="SnailSprite/Hats45"]
+visible = false
+position = Vector2( -20, -15 )
+texture = ExtResource( 14 )
+offset = Vector2( 1, 2 )
+
+[node name="Cowboy45" type="Sprite" parent="SnailSprite/Hats45"]
+visible = false
+position = Vector2( -21, -16 )
+texture = ExtResource( 16 )
+offset = Vector2( 1, 2 )
+
 [node name="Hats90" type="Node2D" parent="SnailSprite"]
-position = Vector2( -6, -24 )
+position = Vector2( -4, -25 )
+
+[node name="PilgrimHat" type="Sprite" parent="SnailSprite/Hats90"]
+visible = false
+texture = ExtResource( 4 )
 
 [node name="FezHat" type="Sprite" parent="SnailSprite/Hats90"]
 visible = false
 texture = ExtResource( 7 )
 
-[node name="PilgrimHat" type="Sprite" parent="SnailSprite/Hats90"]
+[node name="HornsHat" type="Sprite" parent="SnailSprite/Hats90"]
 visible = false
-texture = ExtResource( 4 )
+texture = ExtResource( 12 )
+offset = Vector2( 0, -2 )
+
+[node name="BeretHat" type="Sprite" parent="SnailSprite/Hats90"]
+visible = false
+texture = ExtResource( 13 )
+offset = Vector2( 0, 2 )
+
+[node name="CowboyHat" type="Sprite" parent="SnailSprite/Hats90"]
+visible = false
+texture = ExtResource( 15 )
+offset = Vector2( 0, 2 )
 
 [node name="BlinkTimer" type="Timer" parent="."]
 one_shot = true

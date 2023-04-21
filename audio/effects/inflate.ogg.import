@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/inflate.ogg-3e224534129d8ee4e5f4e17baa98978a.oggstr"
+
+[deps]
+
+source_file="res://audio/effects/inflate.ogg"
+dest_files=[ "res://.import/inflate.ogg-3e224534129d8ee4e5f4e17baa98978a.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0
