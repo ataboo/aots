@@ -16,6 +16,8 @@ public class GameManager : Node2D
 
     public GameState GameState => _gameState;
 
+    public bool showCredits = false;
+
     public override void _Ready()
     {
         _gameState = new GameState() {
@@ -40,11 +42,12 @@ public class GameManager : Node2D
     }
 
     public void LoadEnd() {
+        showCredits = true;
         GetTree().ChangeSceneTo(mainMenuScene);
-        GetNode<Control>("/root/MainMenu/Credits").Visible = true;
     }
 
     public void LoadMainMenu() {
+        showCredits = false;
         GetTree().ChangeSceneTo(mainMenuScene);
     }
 

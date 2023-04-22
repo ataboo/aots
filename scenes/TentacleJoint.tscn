@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/level/TentacleJointControl.cs" type="Script" id=1]
+
+[node name="TentJoint1" type="PinJoint2D"]
+position = Vector2( 20, 11 )
+bias = 0.2
+script = ExtResource( 1 )

@@ -26,6 +26,10 @@ public class MainMenuControl : Control
         _equipment = GetNode<Control>(equipmentPath) ?? throw new NullReferenceException();
         _levelPick = GetNode<Control>(levelPickPath) ?? throw new NullReferenceException();
 		_gameManager = GetNode<GameManager>("/root/GameManager") ?? throw new NullReferenceException();
+
+        if(_gameManager.showCredits) {
+            _credits.Visible = true;
+        }
     }
 
     public void OnInstructionsClick() {

@@ -47,7 +47,6 @@ public class HUDControl : Control
     [Export] Texture blueLg;
     [Export] Texture blueDeadLg;
 
-
     private bool heaterInit = false;
 
     public override void _Ready()

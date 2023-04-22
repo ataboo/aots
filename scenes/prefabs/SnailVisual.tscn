@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=37 format=2]
 
 [ext_resource path="res://src/level/SnailSpriteControl.cs" type="Script" id=1]
 [ext_resource path="res://textures/hats/pilgrim_45.png" type="Texture" id=2]
@@ -16,6 +16,9 @@
 [ext_resource path="res://textures/hats/beret_45.png" type="Texture" id=14]
 [ext_resource path="res://textures/hats/cowboy_90.png" type="Texture" id=15]
 [ext_resource path="res://textures/hats/cowboy_45.png" type="Texture" id=16]
+[ext_resource path="res://scenes/TentacleSegment.tscn" type="PackedScene" id=17]
+[ext_resource path="res://scenes/TentacleJoint.tscn" type="PackedScene" id=18]
+[ext_resource path="res://src/level/TentacleRootControl.cs" type="Script" id=19]
 
 [sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 9 )
@@ -115,6 +118,9 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="RectangleShape2D" id=17]
+extents = Vector2( 1, 1 )
+
 [node name="SnailVisual" type="Node2D"]
 script = ExtResource( 1 )
 snailSpritePath = NodePath("SnailSprite")
@@ -126,8 +132,11 @@ hat5Paths = [ NodePath("SnailSprite/Hats45/Cowboy45"), NodePath("SnailSprite/Hat
 hat90BasePath = NodePath("SnailSprite/Hats90")
 hat45BasePath = NodePath("SnailSprite/Hats45")
 blinkTimerPath = NodePath("BlinkTimer")
+frontTentaclePath = NodePath("FrontTentacle")
+backTentaclePath = NodePath("BackTentacle")
 
 [node name="SnailSprite" type="AnimatedSprite" parent="."]
+z_index = 10
 frames = SubResource( 1 )
 animation = "still90"
 
@@ -189,3 +198,159 @@ offset = Vector2( 0, 2 )
 
 [node name="BlinkTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="FrontTentacle" type="Node2D" parent="."]
+z_index = 11
+script = ExtResource( 19 )
+rootSegmentPath = NodePath("TentacleRoot")
+
+[node name="TentacleRoot" type="KinematicBody2D" parent="FrontTentacle"]
+position = Vector2( 20, 11 )
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FrontTentacle/TentacleRoot"]
+shape = SubResource( 17 )
+
+[node name="TentJoint1" parent="FrontTentacle" instance=ExtResource( 18 )]
+node_a = NodePath("../TentacleRoot")
+node_b = NodePath("../Segment1")
+
+[node name="Segment1" parent="FrontTentacle" instance=ExtResource( 17 )]
+position = Vector2( 18, 11 )
+nextSegmentPath = NodePath("../Segment2")
+
+[node name="TentJoint2" parent="FrontTentacle" instance=ExtResource( 18 )]
+position = Vector2( 16, 11 )
+node_a = NodePath("../Segment1")
+node_b = NodePath("../Segment2")
+
+[node name="Segment2" parent="FrontTentacle" instance=ExtResource( 17 )]
+position = Vector2( 14, 11 )
+
+[node name="TentJoint3" parent="FrontTentacle" instance=ExtResource( 18 )]
+position = Vector2( 12, 11 )
+node_a = NodePath("../Segment2")
+node_b = NodePath("../Segment3")
+
+[node name="Segment3" parent="FrontTentacle" instance=ExtResource( 17 )]
+position = Vector2( 10, 11 )
+nextSegmentPath = NodePath("../Segment4")
+
+[node name="TentJoint4" parent="FrontTentacle" instance=ExtResource( 18 )]
+position = Vector2( 8, 11 )
+node_a = NodePath("../Segment3")
+node_b = NodePath("../Segment4")
+
+[node name="Segment4" parent="FrontTentacle" instance=ExtResource( 17 )]
+position = Vector2( 6, 11 )
+
+[node name="TentJoint5" parent="FrontTentacle" instance=ExtResource( 18 )]
+position = Vector2( 4, 11 )
+node_a = NodePath("../Segment4")
+node_b = NodePath("../Segment5")
+
+[node name="Segment5" parent="FrontTentacle" instance=ExtResource( 17 )]
+position = Vector2( 2, 11 )
+nextSegmentPath = NodePath("../Segment6")
+
+[node name="TentJoint6" parent="FrontTentacle" instance=ExtResource( 18 )]
+position = Vector2( 0, 11 )
+node_a = NodePath("../Segment5")
+node_b = NodePath("../Segment6")
+
+[node name="Segment6" parent="FrontTentacle" instance=ExtResource( 17 )]
+position = Vector2( -2, 11 )
+
+[node name="TentJoint7" parent="FrontTentacle" instance=ExtResource( 18 )]
+position = Vector2( -4, 11 )
+node_a = NodePath("../Segment6")
+node_b = NodePath("../Segment7")
+
+[node name="Segment7" parent="FrontTentacle" instance=ExtResource( 17 )]
+position = Vector2( -6, 11 )
+nextSegmentPath = NodePath("../Segment8")
+
+[node name="TentJoint8" parent="FrontTentacle" instance=ExtResource( 18 )]
+position = Vector2( -8, 11 )
+node_a = NodePath("../Segment7")
+node_b = NodePath("../Segment8")
+
+[node name="Segment8" parent="FrontTentacle" instance=ExtResource( 17 )]
+position = Vector2( -10, 11 )
+
+[node name="BackTentacle" type="Node2D" parent="."]
+z_index = 9
+script = ExtResource( 19 )
+rootSegmentPath = NodePath("TentacleRoot")
+
+[node name="TentacleRoot" type="KinematicBody2D" parent="BackTentacle"]
+position = Vector2( 24, 11 )
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BackTentacle/TentacleRoot"]
+shape = SubResource( 17 )
+
+[node name="TentJoint1" parent="BackTentacle" instance=ExtResource( 18 )]
+position = Vector2( 24, 11 )
+node_a = NodePath("../TentacleRoot")
+node_b = NodePath("../Segment1")
+
+[node name="Segment1" parent="BackTentacle" instance=ExtResource( 17 )]
+position = Vector2( 22, 11 )
+
+[node name="TentJoint2" parent="BackTentacle" instance=ExtResource( 18 )]
+node_a = NodePath("../Segment1")
+node_b = NodePath("../Segment2")
+
+[node name="Segment2" parent="BackTentacle" instance=ExtResource( 17 )]
+position = Vector2( 18, 11 )
+
+[node name="TentJoint3" parent="BackTentacle" instance=ExtResource( 18 )]
+position = Vector2( 16, 11 )
+node_a = NodePath("../Segment2")
+node_b = NodePath("../Segment3")
+
+[node name="Segment3" parent="BackTentacle" instance=ExtResource( 17 )]
+position = Vector2( 14, 11 )
+
+[node name="TentJoint4" parent="BackTentacle" instance=ExtResource( 18 )]
+position = Vector2( 12, 11 )
+node_a = NodePath("../Segment3")
+node_b = NodePath("../Segment4")
+
+[node name="Segment4" parent="BackTentacle" instance=ExtResource( 17 )]
+position = Vector2( 10, 11 )
+
+[node name="TentJoint5" parent="BackTentacle" instance=ExtResource( 18 )]
+position = Vector2( 8, 11 )
+node_a = NodePath("../Segment4")
+node_b = NodePath("../Segment5")
+
+[node name="Segment5" parent="BackTentacle" instance=ExtResource( 17 )]
+position = Vector2( 6, 11 )
+
+[node name="TentJoint6" parent="BackTentacle" instance=ExtResource( 18 )]
+position = Vector2( 4, 11 )
+node_a = NodePath("../Segment5")
+node_b = NodePath("../Segment6")
+
+[node name="Segment6" parent="BackTentacle" instance=ExtResource( 17 )]
+position = Vector2( 2, 11 )
+
+[node name="TentJoint7" parent="BackTentacle" instance=ExtResource( 18 )]
+position = Vector2( 0, 11 )
+node_a = NodePath("../Segment6")
+node_b = NodePath("../Segment7")
+
+[node name="Segment7" parent="BackTentacle" instance=ExtResource( 17 )]
+position = Vector2( -2, 11 )
+
+[node name="TentJoint8" parent="BackTentacle" instance=ExtResource( 18 )]
+position = Vector2( -4, 11 )
+node_a = NodePath("../Segment7")
+node_b = NodePath("../Segment8")
+
+[node name="Segment8" parent="BackTentacle" instance=ExtResource( 17 )]
+position = Vector2( -6, 11 )

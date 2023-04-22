@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=8 format=2]
+[gd_resource type="Theme" load_steps=10 format=2]
 
 [ext_resource path="res://fonts/feast-of-flesh-bb.regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://theme/PanelStylebox.tres" type="StyleBox" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://theme/menu_button_hover_style.tres" type="StyleBox" id=4]
 [ext_resource path="res://theme/menu_button_press_style.tres" type="StyleBox" id=5]
 [ext_resource path="res://theme/label_font.tres" type="DynamicFont" id=6]
+[ext_resource path="res://theme/sans_bold.tres" type="DynamicFont" id=7]
+[ext_resource path="res://theme/sans_regular.tres" type="DynamicFont" id=8]
 
 [sub_resource type="DynamicFont" id=2]
 size = 24
@@ -22,3 +24,6 @@ Label/colors/font_color_shadow = Color( 0, 0, 0, 0.333333 )
 Label/fonts/font = ExtResource( 6 )
 Panel/styles/panel = null
 PanelContainer/styles/panel = ExtResource( 2 )
+RichTextLabel/colors/default_color = Color( 0.588235, 0, 0, 1 )
+RichTextLabel/fonts/bold_font = ExtResource( 7 )
+RichTextLabel/fonts/normal_font = ExtResource( 8 )

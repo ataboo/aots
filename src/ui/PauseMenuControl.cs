@@ -35,6 +35,10 @@ public class PauseMenuControl : Control
         _gameManager.LoadMainMenu();
     }
 
+    public void OnPauseClick() {
+        SetPaused(true);
+    }
+
     public void OnResumeClick() {
         SetPaused(false);
     }

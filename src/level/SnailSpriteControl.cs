@@ -54,6 +54,13 @@ public class SnailSpriteControl : Node2D
     public NodePath blinkTimerPath;
     private Timer _blinkTimer;
 
+    [Export] public NodePath frontTentaclePath;
+    private Node2D _frontTentacle;
+
+
+    [Export] public NodePath backTentaclePath;
+    private Node2D _backTentacle;
+
     public override void _Ready()
     {
         _snailSprite = GetNode<AnimatedSprite>(snailSpritePath) ?? throw new NullReferenceException();
@@ -62,6 +69,8 @@ public class SnailSpriteControl : Node2D
         _hat90Base = GetNode<Node2D>(hat90BasePath) ?? throw new NullReferenceException();
         _hat45Base = GetNode<Node2D>(hat45BasePath) ?? throw new NullReferenceException();
         _blinkTimer = GetNode<Timer>(blinkTimerPath) ?? throw new NullReferenceException();
+        _frontTentacle = GetNode<Node2D>(frontTentaclePath) ?? throw new NullReferenceException();
+        _backTentacle = GetNode<Node2D>(backTentaclePath) ?? throw new NullReferenceException();
 
         _hat1Sprites = hat1Paths.Select(p => GetNode<Sprite>(p) ?? throw new NullReferenceException()).ToArray();
         _hat2Sprites = hat2Paths.Select(p => GetNode<Sprite>(p) ?? throw new NullReferenceException()).ToArray();
@@ -139,6 +148,14 @@ public class SnailSpriteControl : Node2D
                 _snailSprite.Rotation = 0;
                 _hat90Base.Visible = true;
                 _hat45Base.Visible = false;
+
+                var floatTentScale = new Vector2(flipFloat ? -1 : 1, 1);
+                _frontTentacle.Scale = floatTentScale;
+                _backTentacle.Scale = floatTentScale;
+                
+                var tentRotation = flipFloat ? -Mathf.Pi / 6 : Mathf.Pi / 6;
+                _frontTentacle.Rotation = tentRotation;
+                _backTentacle.Rotation = tentRotation;
                 return;
             }
         } else {
@@ -154,12 +171,9 @@ public class SnailSpriteControl : Node2D
             case 0:
                 _snailSprite.Rotation = 0;
                 ninety = true;
+                _frontTentacle.Scale = new Vector2(1, 1);
                 break;
             case 8:
-                _snailSprite.Rotation = 0;
-                flipH = true;
-                ninety = true;
-                break;
             case 7:
             case -7:
                 _snailSprite.Rotation = 0;
@@ -189,23 +203,19 @@ public class SnailSpriteControl : Node2D
             case 1:
             case 2:
                 _snailSprite.Rotation = 0;
-                _hat45Base.Scale = new Vector2(1, 1);
                 break;
             case -5:
             case -6:
                 _snailSprite.Rotation = -Mathf.Pi/2f;
-                _hat45Base.Scale = new Vector2(-1, 1);
                 flipH = true;
                 break;
             case -1:
             case -2:
                 _snailSprite.Rotation = Mathf.Pi/2f;
-                _hat45Base.Scale = new Vector2(1, 1);
                 break;
             case 5:
             case 6:
                 _snailSprite.Rotation = 0;
-                _hat45Base.Scale = new Vector2(-1, 1);
                 flipH = true;
                 break;
         }
@@ -217,12 +227,28 @@ public class SnailSpriteControl : Node2D
         _hat90Base.Visible = ninety;
         _hat45Base.Visible = !ninety;
 
+        var tentacleScale = new Vector2(flipH ? -1 : 1, 1);
+        var tentacleRotation = _snailSprite.Rotation;
+
         if(ninety) {
             _hat90Base.Scale = new Vector2(flipH ? -1 : 1, 1);
             _hat90Base.Position = new Vector2(flipH ? -_hat90BaseStartPos.x : _hat90BaseStartPos.x, _hat90BaseStartPos.y);
         } else {
             _hat45Base.Position = new Vector2(_hat45BaseStartPos.x * (flipH ? -1 : 1), _hat45BaseStartPos.y);
+            _hat45Base.Scale = new Vector2(flipH ? -1 : 1, 1);
+
+            tentacleRotation = _snailSprite.Rotation + (flipH ? Mathf.Pi / 4 : -Mathf.Pi / 4);
         }
+
+        // if(state.velocity.LengthSquared() > 5) {
+        //     tentacleScale.x *= 1.3f;
+        // }
+
+        _frontTentacle.Scale = tentacleScale;
+        _backTentacle.Scale = tentacleScale;
+        _frontTentacle.Rotation = tentacleRotation;
+        _backTentacle.Rotation = tentacleRotation;
+
     }
 
     private void UpdateSnailAnimation(bool ninety, SnailState state)  {
