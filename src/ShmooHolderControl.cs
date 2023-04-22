@@ -7,7 +7,7 @@ public class ShmooHolderControl : Node2D
 	[Signal]
 	public delegate ShmooCount ShmooCountChanged();
 
-	private RandomNumberGenerator _rng = new RandomNumberGenerator();
+	private static RandomNumberGenerator _rng = new RandomNumberGenerator();
 
 	[Export]
 	public NodePath mainTileMapPath;

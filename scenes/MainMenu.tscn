@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=37 format=2]
 
 [ext_resource path="res://textures/SnailTitle_640.png" type="Texture" id=1]
 [ext_resource path="res://theme/aots_theme.tres" type="Theme" id=2]
@@ -30,9 +30,17 @@
 [ext_resource path="res://textures/hats/fez45.png" type="Texture" id=28]
 [ext_resource path="res://textures/hats/horns_45.png" type="Texture" id=29]
 [ext_resource path="res://textures/hats/cowboy_45.png" type="Texture" id=30]
+[ext_resource path="res://theme/sans_regular.tres" type="DynamicFont" id=31]
+[ext_resource path="res://theme/sans_bold.tres" type="DynamicFont" id=32]
+[ext_resource path="res://fonts/FreeSans.ttf" type="DynamicFontData" id=33]
+[ext_resource path="res://src/ui/LevelPickControl.cs" type="Script" id=34]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.00392157, 0.0862745, 0.0705882, 1 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 11
+font_data = ExtResource( 33 )
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
@@ -41,11 +49,38 @@ script = ExtResource( 4 )
 instructionsPath = NodePath("InstructionsOvelay")
 creditsPath = NodePath("Credits")
 equipmentPath = NodePath("Equipment")
+levelPickPath = NodePath("LevelPick")
 
 [node name="BG" type="Panel" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 1 )
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 14 )
+autoplay = true
+bus = "Music"
+script = ExtResource( 19 )
+audioButtonPath = NodePath("../AudioButton")
+musicButtonPath = NodePath("../MusicButton")
+audioOn = ExtResource( 18 )
+audioOff = ExtResource( 17 )
+musicOn = ExtResource( 16 )
+musicOff = ExtResource( 15 )
+
+[node name="MusicButton" type="TextureButton" parent="."]
+margin_left = 596.0
+margin_top = 434.0
+margin_right = 628.0
+margin_bottom = 466.0
+texture_normal = ExtResource( 16 )
+
+[node name="AudioButton" type="TextureButton" parent="."]
+margin_left = 556.0
+margin_top = 434.0
+margin_right = 588.0
+margin_bottom = 466.0
+texture_normal = ExtResource( 18 )
 
 [node name="TextureRect" type="TextureRect" parent="."]
 margin_top = -60.0
@@ -55,12 +90,14 @@ texture = ExtResource( 1 )
 stretch_mode = 1
 
 [node name="MainButtons" type="PanelContainer" parent="."]
-anchor_right = 1.0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = 250.0
-margin_top = 331.0
-margin_right = -250.0
-margin_bottom = -20.0
+margin_left = -80.0
+margin_top = -164.0
+margin_right = 80.0
+margin_bottom = -32.0
 rect_min_size = Vector2( 160, 0 )
 theme = ExtResource( 2 )
 
@@ -102,6 +139,67 @@ focus_mode = 0
 theme = ExtResource( 2 )
 enabled_focus_mode = 0
 text = "Credits"
+
+[node name="LevelPick" type="Panel" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 2 )
+custom_styles/panel = ExtResource( 6 )
+script = ExtResource( 34 )
+level1BtnPath = NodePath("Panel/VBoxContainer/Level1Button")
+level2BtnPath = NodePath("Panel/VBoxContainer/Level2Button")
+
+[node name="Panel" type="PanelContainer" parent="LevelPick"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -74.0
+margin_top = -70.5
+margin_right = 74.0
+margin_bottom = 70.5
+theme = ExtResource( 2 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LevelPick/Panel"]
+margin_right = 148.0
+margin_bottom = 141.0
+
+[node name="Label" type="Label" parent="LevelPick/Panel/VBoxContainer"]
+margin_right = 148.0
+margin_bottom = 39.0
+custom_fonts/font = ExtResource( 10 )
+text = "pick Level"
+
+[node name="Level1Button" type="Button" parent="LevelPick/Panel/VBoxContainer"]
+margin_left = 29.0
+margin_top = 43.0
+margin_right = 119.0
+margin_bottom = 73.0
+rect_min_size = Vector2( 90, 30 )
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Level 1"
+
+[node name="Level2Button" type="Button" parent="LevelPick/Panel/VBoxContainer"]
+margin_left = 29.0
+margin_top = 77.0
+margin_right = 119.0
+margin_bottom = 107.0
+rect_min_size = Vector2( 90, 30 )
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Level 2"
+
+[node name="CloseButton" type="Button" parent="LevelPick/Panel/VBoxContainer"]
+margin_left = 29.0
+margin_top = 111.0
+margin_right = 119.0
+margin_bottom = 141.0
+rect_min_size = Vector2( 90, 30 )
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Close"
 
 [node name="InstructionsOvelay" type="Panel" parent="."]
 visible = false
@@ -158,19 +256,51 @@ custom_styles/panel = ExtResource( 6 )
 [node name="Panel" type="PanelContainer" parent="Credits"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 120.0
-margin_top = 74.0
-margin_right = -120.0
-margin_bottom = -72.0
+margin_left = 74.0
+margin_top = 21.0
+margin_right = -66.0
+margin_bottom = -30.0
 theme = ExtResource( 2 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Credits/Panel"]
-margin_right = 400.0
-margin_bottom = 334.0
+margin_right = 500.0
+margin_bottom = 429.0
+
+[node name="Label" type="Label" parent="Credits/Panel/VBoxContainer"]
+margin_right = 500.0
+margin_bottom = 39.0
+custom_fonts/font = ExtResource( 10 )
+text = "Attack of the Snail"
+align = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Credits/Panel/VBoxContainer"]
+margin_top = 43.0
+margin_right = 500.0
+margin_bottom = 143.0
+rect_min_size = Vector2( 500, 100 )
+size_flags_horizontal = 4
+theme = ExtResource( 2 )
+custom_colors/default_color = Color( 0.588235, 0, 0, 1 )
+custom_fonts/bold_font = ExtResource( 32 )
+custom_fonts/normal_font = ExtResource( 31 )
+bbcode_enabled = true
+bbcode_text = "[center][url=ataboo.itch.io][color=blue][b]ataboo.itch.io[/b][/color][/url]
+programming / sound / animation
+
+[url=hkrampers.itch.io][color=blue][b]hkrampers.itch.io[/b][/color][/url]
+art / design[/center]"
+text = "ataboo.itch.io
+programming / sound / animation
+
+hkrampers.itch.io
+art / design"
+scroll_active = false
 
 [node name="TextureRect" type="TextureRect" parent="Credits/Panel/VBoxContainer"]
-margin_right = 400.0
-margin_bottom = 300.0
+margin_left = 135.0
+margin_top = 147.0
+margin_right = 365.0
+margin_bottom = 318.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -178,11 +308,24 @@ size_flags_vertical = 0
 texture = ExtResource( 5 )
 stretch_mode = 5
 
+[node name="Label2" type="Label" parent="Credits/Panel/VBoxContainer"]
+margin_top = 322.0
+margin_right = 500.0
+margin_bottom = 394.0
+theme = ExtResource( 2 )
+custom_fonts/font = SubResource( 2 )
+text = "Audio from Freesound.org:
+https://freesound.org/people/onikage22/sounds/240566/
+https://freesound.org/people/Terhen/sounds/234211/
+https://freesound.org/people/TimPryor/sounds/188606/
+https://freesound.org/people/leonseptavaux/sounds/346481/"
+align = 1
+
 [node name="HBoxContainer" type="HBoxContainer" parent="Credits/Panel/VBoxContainer"]
-margin_left = 155.0
-margin_top = 304.0
-margin_right = 245.0
-margin_bottom = 334.0
+margin_left = 205.0
+margin_top = 398.0
+margin_right = 295.0
+margin_bottom = 428.0
 size_flags_horizontal = 4
 
 [node name="CloseInstructions" type="Button" parent="Credits/Panel/VBoxContainer/HBoxContainer"]
@@ -325,36 +468,13 @@ size_flags_horizontal = 4
 size_flags_vertical = 0
 text = "Close"
 
-[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 14 )
-autoplay = true
-bus = "Music"
-script = ExtResource( 19 )
-audioButtonPath = NodePath("AudioButton")
-musicButtonPath = NodePath("MusicButton")
-audioOn = ExtResource( 18 )
-audioOff = ExtResource( 17 )
-musicOn = ExtResource( 16 )
-musicOff = ExtResource( 15 )
-
-[node name="MusicButton" type="TextureButton" parent="MusicPlayer"]
-margin_left = 596.0
-margin_top = 434.0
-margin_right = 628.0
-margin_bottom = 466.0
-texture_normal = ExtResource( 16 )
-
-[node name="AudioButton" type="TextureButton" parent="MusicPlayer"]
-margin_left = 556.0
-margin_top = 434.0
-margin_right = 588.0
-margin_bottom = 466.0
-texture_normal = ExtResource( 18 )
-
 [connection signal="pressed" from="MainButtons/VBoxContainer/StartButton" to="." method="OnStartGameClick"]
 [connection signal="pressed" from="MainButtons/VBoxContainer/InstructionsButton" to="." method="OnInstructionsClick"]
 [connection signal="pressed" from="MainButtons/VBoxContainer/Equipment" to="." method="OnEquipmentClick"]
 [connection signal="pressed" from="MainButtons/VBoxContainer/Credits" to="." method="OnCreditsClick"]
+[connection signal="pressed" from="LevelPick/Panel/VBoxContainer/Level1Button" to="LevelPick" method="OnLevelButtonClick" binds= [ 0 ]]
+[connection signal="pressed" from="LevelPick/Panel/VBoxContainer/Level2Button" to="LevelPick" method="OnLevelButtonClick" binds= [ 1 ]]
+[connection signal="pressed" from="LevelPick/Panel/VBoxContainer/CloseButton" to="." method="OnLevelCloseClick"]
 [connection signal="pressed" from="InstructionsOvelay/Panel/VBoxContainer/HBoxContainer/CloseInstructions" to="." method="OnCloseInstructionsClick"]
 [connection signal="pressed" from="Credits/Panel/VBoxContainer/HBoxContainer/CloseInstructions" to="." method="OnCreditsCloseClick"]
 [connection signal="pressed" from="Equipment/Panel/VBoxContainer/Panel/Hat1Button" to="Equipment" method="OnHatClick" binds= [ 0 ]]

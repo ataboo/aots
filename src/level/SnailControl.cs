@@ -60,6 +60,8 @@ public class SnailControl : KinematicBody2D
 
     private Vector2 _startPosition;
 
+    [Export] public float terminalVelocity = 240f;
+
     public bool InBubbles {get; set;}
 
     public override void _Ready()
@@ -155,6 +157,11 @@ public class SnailControl : KinematicBody2D
         if(InBubbles) {
             _state.velocity.y -= bubbleForce * delta;
         }
+
+        var velocityMag = _state.velocity.Length();
+        if(velocityMag > terminalVelocity) {
+            _state.velocity = _state.velocity * terminalVelocity / velocityMag;
+        }
         
         _state.velocity = MoveAndSlide(_state.velocity, Vector2.Up, stopOnSlope: true);
 
@@ -187,7 +194,7 @@ public class SnailControl : KinematicBody2D
     private bool CollidedWithHazard() {
         var col = GetLastSlideCollision();
         if(col?.Collider is TileMapControl tileMap) {
-            return tileMap.PositionIsSpike(col.Position);
+            return tileMap.PositionIsSpike(Position, col.Normal);
         }
         
         return false;

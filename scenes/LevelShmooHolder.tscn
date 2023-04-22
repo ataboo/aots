@@ -1,0 +1,239 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scenes/prefabs/Shmoo2.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/prefabs/Shmoo1.tscn" type="PackedScene" id=7]
+[ext_resource path="res://src/ShmooHolderControl.cs" type="Script" id=9]
+[ext_resource path="res://scenes/prefabs/Shmoo3.tscn" type="PackedScene" id=10]
+
+[node name="ShmooHolder" type="Node2D"]
+script = ExtResource( 9 )
+mainTileMapPath = NodePath("../MainTileMap")
+_shmooPrefabs = [ ExtResource( 7 ), ExtResource( 2 ), ExtResource( 10 ) ]
+
+[node name="Shmoo1" parent="." instance=ExtResource( 7 )]
+position = Vector2( 848.505, -512.248 )
+
+[node name="Shmoo2" parent="." instance=ExtResource( 2 )]
+position = Vector2( 887.526, -511.98 )
+
+[node name="Shmoo3" parent="." instance=ExtResource( 2 )]
+position = Vector2( 904.224, -512.128 )
+
+[node name="Shmoo4" parent="." instance=ExtResource( 10 )]
+position = Vector2( 1104.99, -511.856 )
+
+[node name="Shmoo5" parent="." instance=ExtResource( 10 )]
+position = Vector2( 1143.13, -512.511 )
+
+[node name="Shmoo6" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1172.91, -511.64 )
+
+[node name="Shmoo7" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1195.8, -511.271 )
+
+[node name="Shmoo8" parent="." instance=ExtResource( 10 )]
+position = Vector2( 1236.68, -512.743 )
+
+[node name="Shmoo9" parent="." instance=ExtResource( 10 )]
+position = Vector2( 1260.97, -512.369 )
+
+[node name="Shmoo10" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1299.94, -512.159 )
+
+[node name="Shmoo11" parent="." instance=ExtResource( 10 )]
+position = Vector2( 1323.84, -511.378 )
+
+[node name="Shmoo12" parent="." instance=ExtResource( 10 )]
+position = Vector2( 1352.76, -511.527 )
+
+[node name="Shmoo13" parent="." instance=ExtResource( 7 )]
+position = Vector2( 271.636, -384.943 )
+
+[node name="Shmoo14" parent="." instance=ExtResource( 10 )]
+position = Vector2( 311.624, -384.151 )
+
+[node name="Shmoo15" parent="." instance=ExtResource( 7 )]
+position = Vector2( 328.339, -383.969 )
+
+[node name="Shmoo16" parent="." instance=ExtResource( 2 )]
+position = Vector2( 20.1462, -320.282 )
+
+[node name="Shmoo17" parent="." instance=ExtResource( 10 )]
+position = Vector2( 43.652, -319.322 )
+
+[node name="Shmoo18" parent="." instance=ExtResource( 2 )]
+position = Vector2( 72.037, -319.016 )
+
+[node name="Shmoo19" parent="." instance=ExtResource( 2 )]
+position = Vector2( 527.515, -319.982 )
+
+[node name="Shmoo22" parent="." instance=ExtResource( 10 )]
+position = Vector2( 840.635, -72.2583 )
+
+[node name="Shmoo23" parent="." instance=ExtResource( 2 )]
+position = Vector2( 849.328, -82.5505 )
+
+[node name="Shmoo24" parent="." instance=ExtResource( 10 )]
+position = Vector2( 858.318, -94.0873 )
+
+[node name="Shmoo25" parent="." instance=ExtResource( 7 )]
+position = Vector2( 878.78, -117.747 )
+
+[node name="Shmoo26" parent="." instance=ExtResource( 10 )]
+position = Vector2( 887.432, -127.228 )
+
+[node name="Shmoo27" parent="." instance=ExtResource( 7 )]
+position = Vector2( 922.767, -106.544 )
+
+[node name="Shmoo28" parent="." instance=ExtResource( 10 )]
+position = Vector2( 951.959, -71.4911 )
+
+[node name="Shmoo29" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1159.48, -128.17 )
+
+[node name="Shmoo30" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1184.65, -128.903 )
+
+[node name="Shmoo31" parent="." instance=ExtResource( 10 )]
+position = Vector2( 1242.76, -105.788 )
+
+[node name="Shmoo32" parent="." instance=ExtResource( 10 )]
+position = Vector2( 1272.37, -72.2317 )
+
+[node name="Shmoo33" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1544.5, -71.7568 )
+
+[node name="Shmoo34" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1552.74, -82.9116 )
+
+[node name="Shmoo35" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1563.63, -93.5808 )
+
+[node name="Shmoo36" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1582.52, -117.114 )
+
+[node name="Shmoo37" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1592.49, -127.241 )
+
+[node name="Shmoo38" parent="." instance=ExtResource( 10 )]
+position = Vector2( -164.849, -42.4498 )
+
+[node name="Shmoo39" parent="." instance=ExtResource( 2 )]
+position = Vector2( -135.805, -7.48805 )
+
+[node name="Shmoo40" parent="." instance=ExtResource( 10 )]
+position = Vector2( 456.311, -63.4909 )
+
+[node name="Shmoo41" parent="." instance=ExtResource( 10 )]
+position = Vector2( 480.735, -64.5039 )
+
+[node name="Shmoo42" parent="." instance=ExtResource( 2 )]
+position = Vector2( 543.488, -64.3759 )
+
+[node name="Shmoo43" parent="." instance=ExtResource( 2 )]
+position = Vector2( 567.183, -63.9102 )
+
+[node name="Shmoo44" parent="." instance=ExtResource( 2 )]
+position = Vector2( 584.094, -64.0363 )
+
+[node name="Shmoo45" parent="." instance=ExtResource( 2 )]
+position = Vector2( 595.819, -64.7516 )
+
+[node name="Shmoo46" parent="." instance=ExtResource( 2 )]
+position = Vector2( 775.462, -64.2958 )
+
+[node name="Shmoo47" parent="." instance=ExtResource( 7 )]
+position = Vector2( 800.857, -64.6647 )
+
+[node name="Shmoo48" parent="." instance=ExtResource( 10 )]
+position = Vector2( 992.042, -63.4396 )
+
+[node name="Shmoo49" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1015.48, -63.7978 )
+
+[node name="Shmoo50" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1056.53, -64.8825 )
+
+[node name="Shmoo51" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1080.8, -64.4213 )
+
+[node name="Shmoo52" parent="." instance=ExtResource( 10 )]
+position = Vector2( 1120.04, -64.182 )
+
+[node name="Shmoo53" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1143.37, -64.2303 )
+
+[node name="Shmoo54" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1311.92, -63.7268 )
+
+[node name="Shmoo55" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1336.49, -64.5718 )
+
+[node name="Shmoo56" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1376.81, -64.6853 )
+
+[node name="Shmoo57" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1399.03, -63.031 )
+
+[node name="Shmoo62" parent="." instance=ExtResource( 7 )]
+position = Vector2( -96.052, 0.534227 )
+
+[node name="Shmoo63" parent="." instance=ExtResource( 7 )]
+position = Vector2( -71.0877, -0.286151 )
+
+[node name="Shmoo64" parent="." instance=ExtResource( 7 )]
+position = Vector2( -31.4497, -0.740785 )
+
+[node name="Shmoo65" parent="." instance=ExtResource( 7 )]
+position = Vector2( -8.51474, 0.96121 )
+
+[node name="Shmoo66" parent="." instance=ExtResource( 10 )]
+position = Vector2( 32.9185, -0.57557 )
+
+[node name="Shmoo67" parent="." instance=ExtResource( 10 )]
+position = Vector2( 55.3925, -0.281775 )
+
+[node name="Shmoo68" parent="." instance=ExtResource( 7 )]
+position = Vector2( 96.8043, -0.737336 )
+
+[node name="Shmoo69" parent="." instance=ExtResource( 7 )]
+position = Vector2( 120.233, -0.524309 )
+
+[node name="Shmoo70" parent="." instance=ExtResource( 10 )]
+position = Vector2( 156.116, 23.1413 )
+
+[node name="Shmoo71" parent="." instance=ExtResource( 7 )]
+position = Vector2( 183.978, 56.6046 )
+
+[node name="Shmoo72" parent="." instance=ExtResource( 2 )]
+position = Vector2( 328.632, 55.8486 )
+
+[node name="Shmoo73" parent="." instance=ExtResource( 10 )]
+position = Vector2( 336.63, 45.4892 )
+
+[node name="Shmoo74" parent="." instance=ExtResource( 10 )]
+position = Vector2( 347.211, 34.3833 )
+
+[node name="Shmoo75" parent="." instance=ExtResource( 2 )]
+position = Vector2( 366.562, 10.8557 )
+
+[node name="Shmoo76" parent="." instance=ExtResource( 7 )]
+position = Vector2( 375.844, 0.0287393 )
+
+[node name="Shmoo77" parent="." instance=ExtResource( 2 )]
+position = Vector2( 416.802, -0.58504 )
+
+[node name="Shmoo78" parent="." instance=ExtResource( 2 )]
+position = Vector2( 439.178, -0.854285 )
+
+[node name="Shmoo79" parent="." instance=ExtResource( 2 )]
+position = Vector2( 223.212, 64.9726 )
+
+[node name="Shmoo80" parent="." instance=ExtResource( 10 )]
+position = Vector2( 248.716, 64.8443 )
+
+[node name="Shmoo81" parent="." instance=ExtResource( 7 )]
+position = Vector2( 287.039, 64.9723 )
+
+[node name="Shmoo82" parent="." instance=ExtResource( 10 )]
+position = Vector2( 312.977, 64.9416 )

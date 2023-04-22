@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/level/CameraControl.cs" type="Script" id=1]
+
+[node name="Camera2D" type="Camera2D"]
+position = Vector2( 38, -145 )
+current = true
+script = ExtResource( 1 )
+targetPath = NodePath("../Snail")
+
+[node name="Listener2D" type="Listener2D" parent="."]
+current = true

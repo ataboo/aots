@@ -15,7 +15,7 @@ public class CameraControl : Camera2D
 
     public override void _PhysicsProcess(float delta)
     {
-        var endPos = this.Position.LinearInterpolate(_target.Position, 0.8f * delta);
+        var endPos = this.Position.LinearInterpolate(_target.Position, 0.9f * delta);
         endPos.x = Mathf.Round(endPos.x);
         endPos.y = Mathf.Round(endPos.y);
         this.Position = endPos;

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 using static Enums;
 
 public class HUDControl : Control
@@ -46,6 +47,7 @@ public class HUDControl : Control
     [Export] Texture blueLg;
     [Export] Texture blueDeadLg;
 
+
     private bool heaterInit = false;
 
     public override void _Ready()
@@ -62,23 +64,23 @@ public class HUDControl : Control
     }
 
     public void UpdateHUD(SnailState snailState, LevelState levelState) {
-        this._floatBar.SetLevel(snailState.floatTime / snailState.maxFloatTime);
+        this._floatBar.SetLevel(snailState.floatTime / snailState.maxFloatTime, new Color("1cc7ff"));
         
         UpdateFishHealth(_fish1Bar, levelState.fish1);
         UpdateFishHealth(_fish2Bar, levelState.fish2);
         UpdateFishHealth(_fish3Bar, levelState.fish3);
 
-        this._shmooBar.SetLevel(1 - levelState.shmooCount.CountProgress);
+        this._shmooBar.SetLevel(1 - levelState.shmooCount.CountProgress, new Color("ffd541"), true);
 
         if(!_heaterBar.Visible) {
             _heaterBar.Visible = true;       
         }
 
-        _heaterBar.SetLevel(levelState.temperature, levelState.temperature.ColorForImbalance(0.5f));
+        _heaterBar.SetLevel(levelState.temperature, levelState.temperature.ColorForImbalance(0.5f), false, levelState.temperature.Imbalance() > 0.25f);
     }
     
     private void UpdateFishHealth(HealthBarControl healthBar, FishState fishState) {
-        healthBar.SetLevel(fishState.HealthProgress, fishState.HealthProgress.ColorForImbalance(1.0f));
+        healthBar.SetLevel(fishState.HealthProgress, fishState.HealthProgress.ColorForImbalance(1.0f), false, fishState.HealthProgress < 0.25f);
         if(fishState.justDied) {
             healthBar.SetIcon(SmallTextureForFish(fishState));
         }

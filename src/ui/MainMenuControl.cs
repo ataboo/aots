@@ -17,10 +17,14 @@ public class MainMenuControl : Control
     public NodePath equipmentPath;
     private Control _equipment;
 
+    [Export] NodePath levelPickPath;
+    private Control _levelPick;
+
     public override void _Ready() {
         _instructions = GetNode<Control>(instructionsPath) ?? throw new NullReferenceException();
         _credits = GetNode<Control>(creditsPath) ?? throw new NullReferenceException();
         _equipment = GetNode<Control>(equipmentPath) ?? throw new NullReferenceException();
+        _levelPick = GetNode<Control>(levelPickPath) ?? throw new NullReferenceException();
 		_gameManager = GetNode<GameManager>("/root/GameManager") ?? throw new NullReferenceException();
     }
 
@@ -33,7 +37,7 @@ public class MainMenuControl : Control
     }
 
     public void OnStartGameClick() {
-        _gameManager.LoadLevel(0);
+        _levelPick.Visible = true;
     }
 
     public void OnCreditsClick() {
@@ -51,5 +55,9 @@ public class MainMenuControl : Control
     public void OnEquipmentCloseClick() {
         _equipment.Visible = false;
 
+    }
+
+    public void OnLevelCloseClick() {
+        _levelPick.Visible = false;
     }
 }

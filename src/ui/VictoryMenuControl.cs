@@ -16,6 +16,8 @@ public class VictoryMenuControl : Panel
     public NodePath hudControlPath;
     [Export]
     public NodePath nextButtonPath;
+    [Export]
+    public NodePath restartButtonPath;
 
     [Export]
     public NodePath victoryPlayerPath;
@@ -45,6 +47,8 @@ public class VictoryMenuControl : Panel
     private LevelState _levelState;
     private Button _nextButton;
 
+    private Button _restartButton;
+
     public override void _Ready()
     {
         _titleLabel = GetNode<Label>(titleLabelPath) ?? throw new NullReferenceException();
@@ -53,17 +57,20 @@ public class VictoryMenuControl : Panel
         _fish3Texture = GetNode<TextureRect>(fish3TexturePath) ?? throw new NullReferenceException();
         _hudControl = GetNode<HUDControl>(hudControlPath) ?? throw new NullReferenceException();
         _nextButton = GetNode<Button>(nextButtonPath) ?? throw new NullReferenceException();
+        _restartButton = GetNode<Button>(restartButtonPath) ?? throw new NullReferenceException();
         _victoryPlayer = GetNode<AudioStreamPlayer>(victoryPlayerPath) ?? throw new NullReferenceException();
         _gameManager = GetNode<GameManager>("/root/GameManager");
         _roarControl = GetNode<RoarControl>(roarControlPath) ?? throw new NullReferenceException();
     }
 
-    async public Task ShowVictory(LevelState state) {
+    async public Task ShowVictory(LevelState state, bool hatUnlocked) {
+        _roarControl.UpdateHats();
         _fish1Texture.Texture = null;
         _fish2Texture.Texture = null;
         _fish3Texture.Texture = null;
         _titleLabel.Text = "Ended";
         _nextButton.Visible = false;
+        _restartButton.Visible = false;
         _levelState = state;
 
         GetTree().Paused = true;
@@ -71,7 +78,9 @@ public class VictoryMenuControl : Panel
 
         var perfect = _levelState.fish1.health > 0 && _levelState.fish2.health > 0 && _levelState.fish3.health > 0;
 
-        await ToSignal(GetTree().CreateTimer(1f), "timeout");
+        if(hatUnlocked) {
+            await ToSignal(GetTree().CreateTimer(.6f), "timeout");
+        }
 
         ShowFishResult(_fish1Texture, state.fish1);
 
@@ -83,9 +92,11 @@ public class VictoryMenuControl : Panel
 
         await ToSignal(GetTree().CreateTimer(.7f), "timeout");
         
-        _titleLabel.Text = !state.WonGame() ? "Fail!" : "Victory!";
-        _nextButton.Text = state.WonGame() ? "Next" : "Restart";
-        _nextButton.Visible = true;
+        _titleLabel.Text = !state.WonGame() ? "Fail!" : perfect ? "Perfection!": "Victory!";
+        if(_levelState.WonGame()) {
+            _nextButton.Visible = true;
+        }
+        _restartButton.Visible = true;
 
         _victoryPlayer.Stream = state.WonGame() ? winSound : loseSound;
         _victoryPlayer.Play();
@@ -107,17 +118,17 @@ public class VictoryMenuControl : Panel
     public void OnNextClick() {
         GetTree().Paused = false;
 
-        if(_levelState.WonGame()) {
-            var nextLevelIdx = _levelState.levelIndex + 1;
-            if (nextLevelIdx >= StatsHolder.StartingStats.Length) {
-                _gameManager.LoadMainMenu();
-                // _gameManager.LoadEnd();
-                return;
-            } else {
-                _gameManager.LoadLevel(nextLevelIdx);
-            }
+        var nextLevelIdx = _levelState.levelIndex + 1;
+        if (nextLevelIdx >= StatsHolder.StartingStats.Length) {
+            _gameManager.LoadEnd();
+            return;
         } else {
-            _gameManager.LoadLevel(_levelState.levelIndex);
+            _gameManager.LoadLevel(nextLevelIdx);
         }
+    }
+
+    public void OnRestartClick() {
+        GetTree().Paused = false;
+        _gameManager.LoadLevel(_levelState.levelIndex);
     }
 }

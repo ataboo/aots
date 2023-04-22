@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 [Tool]
 public class HealthBarControl : Control
@@ -20,6 +21,9 @@ public class HealthBarControl : Control
     [Export]
     public Texture iconTexture;
 
+    private float _lastLevel = -1f;
+
+    private const float BLINK_AMOUNT = 0.4f;
 
     public override void _Ready()
     {
@@ -32,12 +36,30 @@ public class HealthBarControl : Control
         _icon.Texture = iconTexture;
     }
 
-    public void SetLevel(float t, Color? barColor = null) {
+    public async Task SetLevel(float t, Color barColor, bool blinkOnChange = false, bool blinkAtInterval = false) {
         t = Mathf.Clamp(t, 0, 1);
         _colorBar.RectSize = new Vector2(_startWidth * t, _colorBar.RectSize.y);
 
-        if(barColor != null) {
-            _colorBar.Color = (Color)barColor;
+        if(blinkOnChange) {
+            if(_lastLevel != t) {
+                if(_colorBar.Color == barColor) {
+                    _colorBar.Color = new Color(Mathf.Clamp(barColor.r + BLINK_AMOUNT, 0, 1), Mathf.Clamp(barColor.g + BLINK_AMOUNT, 0, 1), Mathf.Clamp(barColor.b + BLINK_AMOUNT, 0, 1));
+                }
+                await ToSignal(GetTree().CreateTimer(0.1f), "timeout");
+                _colorBar.Color = barColor;
+
+                _lastLevel = t;
+
+                _colorBar.Color = barColor;
+            }
+        } else if(blinkAtInterval) {
+            if((Godot.Time.GetTicksMsec() % 1000) > 500) {
+                _colorBar.Color = new Color(Mathf.Clamp(barColor.r + BLINK_AMOUNT, 0, 1), Mathf.Clamp(barColor.g + BLINK_AMOUNT, 0, 1), Mathf.Clamp(barColor.b + BLINK_AMOUNT, 0, 1));
+            } else {
+                _colorBar.Color = barColor;
+            }
+        } else {
+            _colorBar.Color = barColor;
         }
     }
 

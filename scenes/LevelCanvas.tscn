@@ -1,0 +1,511 @@
+[gd_scene load_steps=49 format=2]
+
+[ext_resource path="res://theme/aots_theme.tres" type="Theme" id=3]
+[ext_resource path="res://textures/hats/pilgrim.png" type="Texture" id=4]
+[ext_resource path="res://theme/overlay_style.tres" type="StyleBox" id=5]
+[ext_resource path="res://theme/big_title_font.tres" type="DynamicFont" id=6]
+[ext_resource path="res://textures/hats/pilgrim_45.png" type="Texture" id=7]
+[ext_resource path="res://textures/hats/fez45.png" type="Texture" id=8]
+[ext_resource path="res://textures/hats/fez.png" type="Texture" id=9]
+[ext_resource path="res://textures/hats/horns_45.png" type="Texture" id=10]
+[ext_resource path="res://textures/hats/beret_90.png" type="Texture" id=11]
+[ext_resource path="res://textures/hats/horns_90.png" type="Texture" id=12]
+[ext_resource path="res://textures/hats/cowboy_90.png" type="Texture" id=13]
+[ext_resource path="res://textures/hats/beret_45.png" type="Texture" id=14]
+[ext_resource path="res://textures/hats/cowboy_45.png" type="Texture" id=15]
+[ext_resource path="res://scenes/prefabs/HealthBar.tscn" type="PackedScene" id=16]
+[ext_resource path="res://theme/hud_transparent_panel.tres" type="StyleBox" id=17]
+[ext_resource path="res://audio/effects/AOTS_fail-range.ogg" type="AudioStream" id=18]
+[ext_resource path="res://src/ui/HUDControl.cs" type="Script" id=19]
+[ext_resource path="res://textures/hats/hat_unlock_back.png" type="Texture" id=20]
+[ext_resource path="res://src/ui/HatUnlockControl.cs" type="Script" id=21]
+[ext_resource path="res://src/ui/PauseMenuControl.cs" type="Script" id=22]
+[ext_resource path="res://textures/ui/shmoo_icon.png" type="Texture" id=23]
+[ext_resource path="res://textures/ui/temp_icon.png" type="Texture" id=24]
+[ext_resource path="res://textures/ui/fish_dead_icon.png" type="Texture" id=25]
+[ext_resource path="res://textures/ui/fish_alive_icon.png" type="Texture" id=26]
+[ext_resource path="res://src/ui/VictoryMenuControl.cs" type="Script" id=27]
+[ext_resource path="res://textures/particles/bubble.png" type="Texture" id=28]
+[ext_resource path="res://audio/effects/AOTS_taps.ogg" type="AudioStream" id=29]
+[ext_resource path="res://audio/effects/AOTS_Tadaa.ogg" type="AudioStream" id=30]
+[ext_resource path="res://src/ui/RoarControl.cs" type="Script" id=31]
+[ext_resource path="res://audio/effects/AOTS_win_range.ogg" type="AudioStream" id=32]
+[ext_resource path="res://textures/characters/snail-roar-Sheet.png" type="Texture" id=33]
+[ext_resource path="res://audio/effects/AOTS_Unlock.ogg" type="AudioStream" id=34]
+[ext_resource path="res://textures/characters/snail_roar_back.png" type="Texture" id=35]
+[ext_resource path="res://textures/characters/live_shrimp.png" type="Texture" id=36]
+[ext_resource path="res://textures/characters/dead_shrimp.png" type="Texture" id=37]
+[ext_resource path="res://audio/effects/underwater_yell.ogg" type="AudioStream" id=38]
+[ext_resource path="res://textures/characters/all_bettas.png" type="Texture" id=39]
+[ext_resource path="res://textures/characters/blue_fish.png" type="Texture" id=40]
+[ext_resource path="res://textures/characters/dead_blue_fish.png" type="Texture" id=41]
+[ext_resource path="res://textures/characters/deadl_bettas.png" type="Texture" id=42]
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 33 )
+region = Rect2( 0, 0, 72, 72 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 33 )
+region = Rect2( 72, 0, 72, 72 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 33 )
+region = Rect2( 144, 0, 72, 72 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 33 )
+region = Rect2( 0, 72, 72, 72 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 33 )
+region = Rect2( 72, 72, 72, 72 )
+
+[sub_resource type="SpriteFrames" id=14]
+animations = [ {
+"frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 12 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 12 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 12 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 12 ), SubResource( 11 ), SubResource( 10 ), SubResource( 9 ) ],
+"loop": false,
+"name": "roar",
+"speed": 5.0
+} ]
+
+[sub_resource type="Curve" id=15]
+_data = [ Vector2( 0, 0.358896 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Animation" id=17]
+resource_name = "RoarHat"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Hats90:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ true, false, true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Hats45:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.2, 0.4, 3.6, 3.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 55, 58 ), Vector2( 53, 56 ), Vector2( 53, 56 ), Vector2( 55, 58 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Hats45:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.2, 4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false ]
+}
+
+[node name="CanvasLayer" type="CanvasLayer"]
+
+[node name="HUD" type="Control" parent="."]
+margin_right = 640.0
+margin_bottom = 480.0
+mouse_filter = 1
+script = ExtResource( 19 )
+barParentPath = NodePath("Healthbars/VBoxContainer")
+floatBarPath = NodePath("Healthbars/VBoxContainer/Float")
+fish1BarPath = NodePath("Healthbars/VBoxContainer/Fish1")
+fish2BarPath = NodePath("Healthbars/VBoxContainer/Fish2")
+fish3BarPath = NodePath("Healthbars/VBoxContainer/Fish3")
+shmooBarPath = NodePath("Progressbars/VBoxContainer/Shmoobar")
+heaterBarPath = NodePath("Progressbars/VBoxContainer/Tempbar")
+deadFishTexture = ExtResource( 25 )
+liveFishTexture = ExtResource( 26 )
+hatUnlockPath = NodePath("../HatUnlock")
+bettasLg = ExtResource( 39 )
+bettasDeadLg = ExtResource( 42 )
+shrimpLg = ExtResource( 36 )
+shrimpDeadLg = ExtResource( 37 )
+blueLg = ExtResource( 40 )
+blueDeadLg = ExtResource( 41 )
+
+[node name="Healthbars" type="PanelContainer" parent="HUD"]
+margin_left = 10.0
+margin_top = 10.0
+theme = ExtResource( 3 )
+custom_styles/panel = ExtResource( 17 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/Healthbars"]
+margin_right = 130.0
+margin_bottom = 92.0
+rect_min_size = Vector2( 130, 0 )
+custom_constants/separation = 4
+alignment = 1
+
+[node name="Float" parent="HUD/Healthbars/VBoxContainer" instance=ExtResource( 16 )]
+margin_right = 130.0
+barColor = Color( 0.109804, 0.780392, 1, 1 )
+
+[node name="Fish1" parent="HUD/Healthbars/VBoxContainer" instance=ExtResource( 16 )]
+margin_top = 24.0
+margin_right = 130.0
+margin_bottom = 44.0
+barColor = Color( 0.913725, 0.0666667, 0.121569, 1 )
+iconTexture = ExtResource( 26 )
+
+[node name="Fish2" parent="HUD/Healthbars/VBoxContainer" instance=ExtResource( 16 )]
+margin_top = 48.0
+margin_right = 130.0
+margin_bottom = 68.0
+barColor = Color( 0.913725, 0.0666667, 0.121569, 1 )
+iconTexture = ExtResource( 26 )
+
+[node name="Fish3" parent="HUD/Healthbars/VBoxContainer" instance=ExtResource( 16 )]
+margin_top = 72.0
+margin_right = 130.0
+margin_bottom = 92.0
+barColor = Color( 0.913725, 0.0666667, 0.121569, 1 )
+iconTexture = ExtResource( 26 )
+
+[node name="Progressbars" type="PanelContainer" parent="HUD"]
+margin_left = 500.0
+margin_top = 10.0
+margin_right = 630.0
+margin_bottom = 30.0
+theme = ExtResource( 3 )
+custom_styles/panel = ExtResource( 17 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/Progressbars"]
+margin_right = 130.0
+margin_bottom = 44.0
+rect_min_size = Vector2( 130, 0 )
+custom_constants/separation = 4
+alignment = 1
+
+[node name="Shmoobar" parent="HUD/Progressbars/VBoxContainer" instance=ExtResource( 16 )]
+margin_right = 130.0
+barColor = Color( 1, 0.835294, 0.254902, 1 )
+iconTexture = ExtResource( 23 )
+
+[node name="Tempbar" parent="HUD/Progressbars/VBoxContainer" instance=ExtResource( 16 )]
+margin_top = 24.0
+margin_right = 130.0
+margin_bottom = 44.0
+barColor = Color( 0.0784314, 0.627451, 0.180392, 1 )
+iconTexture = ExtResource( 24 )
+
+[node name="PauseOverlay" type="Panel" parent="."]
+pause_mode = 2
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 3 )
+custom_styles/panel = ExtResource( 5 )
+script = ExtResource( 22 )
+levelControlPath = NodePath("../..")
+victoryScreenPath = NodePath("../VictoryOverlay")
+
+[node name="PauseMenu" type="PanelContainer" parent="PauseOverlay"]
+pause_mode = 2
+margin_left = 235.0
+margin_top = 157.0
+margin_right = 406.0
+margin_bottom = 298.0
+theme = ExtResource( 3 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseOverlay/PauseMenu"]
+margin_right = 171.0
+margin_bottom = 141.0
+
+[node name="Label" type="Label" parent="PauseOverlay/PauseMenu/VBoxContainer"]
+margin_right = 171.0
+margin_bottom = 39.0
+custom_fonts/font = ExtResource( 6 )
+text = "Paused"
+align = 1
+
+[node name="Resume" type="Button" parent="PauseOverlay/PauseMenu/VBoxContainer"]
+margin_left = 15.0
+margin_top = 43.0
+margin_right = 155.0
+margin_bottom = 73.0
+rect_min_size = Vector2( 140, 0 )
+focus_mode = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+enabled_focus_mode = 0
+text = "Resume"
+
+[node name="Restart" type="Button" parent="PauseOverlay/PauseMenu/VBoxContainer"]
+margin_left = 15.0
+margin_top = 77.0
+margin_right = 155.0
+margin_bottom = 107.0
+rect_min_size = Vector2( 140, 0 )
+focus_mode = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+enabled_focus_mode = 0
+text = "Restart"
+
+[node name="Exit" type="Button" parent="PauseOverlay/PauseMenu/VBoxContainer"]
+margin_left = 15.0
+margin_top = 111.0
+margin_right = 155.0
+margin_bottom = 141.0
+rect_min_size = Vector2( 140, 0 )
+focus_mode = 1
+size_flags_horizontal = 4
+size_flags_vertical = 4
+enabled_focus_mode = 1
+text = "Exit"
+
+[node name="VictoryOverlay" type="Panel" parent="."]
+pause_mode = 2
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 3 )
+custom_styles/panel = ExtResource( 5 )
+script = ExtResource( 27 )
+titleLabelPath = NodePath("VictoryPanel/VBoxContainer/Title")
+fish1TexturePath = NodePath("VictoryPanel/VBoxContainer/HBoxContainer/TextureRect")
+fish2TexturePath = NodePath("VictoryPanel/VBoxContainer/HBoxContainer/TextureRect2")
+fish3TexturePath = NodePath("VictoryPanel/VBoxContainer/HBoxContainer/TextureRect3")
+hudControlPath = NodePath("../HUD")
+nextButtonPath = NodePath("VictoryPanel/VBoxContainer/HBoxContainer2/Next")
+restartButtonPath = NodePath("VictoryPanel/VBoxContainer/HBoxContainer2/Restart")
+victoryPlayerPath = NodePath("VictoryPlayer")
+roarControlPath = NodePath("RoarBack")
+liveSound = ExtResource( 32 )
+deadSound = ExtResource( 18 )
+winSound = ExtResource( 30 )
+loseSound = ExtResource( 29 )
+
+[node name="RoarBack" type="TextureRect" parent="VictoryOverlay"]
+margin_left = 260.0
+margin_top = 112.0
+margin_right = 388.0
+margin_bottom = 240.0
+rect_pivot_offset = Vector2( -156, 12 )
+texture = ExtResource( 35 )
+script = ExtResource( 31 )
+spritePath = NodePath("RoarAnimation")
+audioPath = NodePath("AudioStreamPlayer")
+particlePath = NodePath("CPUParticles2D")
+hat1Paths = [ NodePath("Hats90/PilgrimHat"), NodePath("Hats45/Pilgrim45") ]
+hat2Paths = [ NodePath("Hats90/FezHat"), NodePath("Hats45/Fez45") ]
+hat3Paths = [ NodePath("Hats90/HornsHat"), NodePath("Hats45/Horns45") ]
+hat4Paths = [ NodePath("Hats90/BeretHat"), NodePath("Hats45/Beret45") ]
+hat5Paths = [ NodePath("Hats90/CowboyHat"), NodePath("Hats45/Cowboy45") ]
+hatAnimatorPath = NodePath("HatAnimationPlayer")
+
+[node name="RoarAnimation" type="AnimatedSprite" parent="VictoryOverlay/RoarBack"]
+position = Vector2( 62, 58 )
+frames = SubResource( 14 )
+animation = "roar"
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="VictoryOverlay/RoarBack"]
+modulate = Color( 1, 1, 1, 0.501961 )
+position = Vector2( 85, 56 )
+emitting = false
+amount = 10
+texture = ExtResource( 28 )
+emission_shape = 1
+emission_sphere_radius = 3.0
+direction = Vector2( 0.3, -0.7 )
+gravity = Vector2( 0, -40 )
+initial_velocity = 15.0
+scale_amount = 1.5
+scale_amount_random = 0.48
+scale_amount_curve = SubResource( 15 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="VictoryOverlay/RoarBack"]
+stream = ExtResource( 38 )
+bus = "Effects"
+
+[node name="HatAnimationPlayer" type="AnimationPlayer" parent="VictoryOverlay/RoarBack"]
+anims/RoarHat = SubResource( 17 )
+
+[node name="Hats90" type="Node2D" parent="VictoryOverlay/RoarBack"]
+position = Vector2( 58, 42 )
+
+[node name="PilgrimHat" type="Sprite" parent="VictoryOverlay/RoarBack/Hats90"]
+visible = false
+position = Vector2( 1, 1 )
+texture = ExtResource( 4 )
+
+[node name="FezHat" type="Sprite" parent="VictoryOverlay/RoarBack/Hats90"]
+visible = false
+texture = ExtResource( 9 )
+
+[node name="HornsHat" type="Sprite" parent="VictoryOverlay/RoarBack/Hats90"]
+visible = false
+texture = ExtResource( 12 )
+offset = Vector2( 0, -2 )
+
+[node name="BeretHat" type="Sprite" parent="VictoryOverlay/RoarBack/Hats90"]
+visible = false
+texture = ExtResource( 11 )
+offset = Vector2( 0, 2 )
+
+[node name="CowboyHat" type="Sprite" parent="VictoryOverlay/RoarBack/Hats90"]
+visible = false
+texture = ExtResource( 13 )
+offset = Vector2( 0, 2 )
+
+[node name="Hats45" type="Node2D" parent="VictoryOverlay/RoarBack"]
+visible = false
+position = Vector2( 55, 58 )
+
+[node name="Pilgrim45" type="Sprite" parent="VictoryOverlay/RoarBack/Hats45"]
+visible = false
+position = Vector2( -18, -13 )
+texture = ExtResource( 7 )
+
+[node name="Fez45" type="Sprite" parent="VictoryOverlay/RoarBack/Hats45"]
+visible = false
+position = Vector2( -20, -15 )
+texture = ExtResource( 8 )
+
+[node name="Horns45" type="Sprite" parent="VictoryOverlay/RoarBack/Hats45"]
+visible = false
+position = Vector2( -20, -15 )
+texture = ExtResource( 10 )
+offset = Vector2( -3, -2 )
+
+[node name="Beret45" type="Sprite" parent="VictoryOverlay/RoarBack/Hats45"]
+visible = false
+position = Vector2( -20, -15 )
+texture = ExtResource( 14 )
+offset = Vector2( 1, 2 )
+
+[node name="Cowboy45" type="Sprite" parent="VictoryOverlay/RoarBack/Hats45"]
+visible = false
+position = Vector2( -21, -16 )
+texture = ExtResource( 15 )
+offset = Vector2( 1, 2 )
+
+[node name="VictoryPanel" type="PanelContainer" parent="VictoryOverlay"]
+pause_mode = 2
+margin_left = 218.0
+margin_top = 249.0
+margin_right = 422.0
+margin_bottom = 390.0
+size_flags_horizontal = 4
+size_flags_vertical = 2
+theme = ExtResource( 3 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VictoryOverlay/VictoryPanel"]
+margin_right = 204.0
+margin_bottom = 141.0
+rect_min_size = Vector2( 204, 0 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Title" type="Label" parent="VictoryOverlay/VictoryPanel/VBoxContainer"]
+margin_right = 204.0
+margin_bottom = 39.0
+custom_fonts/font = ExtResource( 6 )
+text = "Victory!"
+align = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VictoryOverlay/VictoryPanel/VBoxContainer"]
+margin_top = 43.0
+margin_right = 204.0
+margin_bottom = 107.0
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="VictoryOverlay/VictoryPanel/VBoxContainer/HBoxContainer"]
+margin_left = 2.0
+margin_right = 66.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 16, 16 )
+texture = ExtResource( 39 )
+stretch_mode = 4
+
+[node name="TextureRect2" type="TextureRect" parent="VictoryOverlay/VictoryPanel/VBoxContainer/HBoxContainer"]
+margin_left = 70.0
+margin_right = 134.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 16, 16 )
+texture = ExtResource( 36 )
+stretch_mode = 4
+
+[node name="TextureRect3" type="TextureRect" parent="VictoryOverlay/VictoryPanel/VBoxContainer/HBoxContainer"]
+margin_left = 138.0
+margin_right = 202.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 16, 16 )
+texture = ExtResource( 40 )
+stretch_mode = 4
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VictoryOverlay/VictoryPanel/VBoxContainer"]
+margin_top = 111.0
+margin_right = 204.0
+margin_bottom = 141.0
+size_flags_horizontal = 4
+
+[node name="Restart" type="Button" parent="VictoryOverlay/VictoryPanel/VBoxContainer/HBoxContainer2"]
+margin_right = 100.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 100, 0 )
+focus_mode = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+enabled_focus_mode = 0
+text = "Restart"
+
+[node name="Next" type="Button" parent="VictoryOverlay/VictoryPanel/VBoxContainer/HBoxContainer2"]
+margin_left = 104.0
+margin_right = 204.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 100, 0 )
+focus_mode = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+enabled_focus_mode = 0
+text = "Next"
+
+[node name="VictoryPlayer" type="AudioStreamPlayer" parent="VictoryOverlay"]
+bus = "Effects"
+
+[node name="HatUnlock" type="TextureRect" parent="."]
+pause_mode = 2
+visible = false
+margin_left = 563.0
+margin_top = 400.0
+margin_right = 635.0
+margin_bottom = 472.0
+texture = ExtResource( 20 )
+script = ExtResource( 21 )
+hatTextures = [ ExtResource( 4 ), ExtResource( 9 ), ExtResource( 12 ), ExtResource( 11 ), ExtResource( 13 ) ]
+hatRectPath = NodePath("TextureRect")
+audioPath = NodePath("AudioStreamPlayer")
+
+[node name="TextureRect" type="TextureRect" parent="HatUnlock"]
+margin_left = 13.0
+margin_top = 9.0
+margin_right = 59.0
+margin_bottom = 55.0
+texture = ExtResource( 4 )
+expand = true
+stretch_mode = 5
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="HatUnlock"]
+stream = ExtResource( 34 )
+volume_db = -4.0
+bus = "Effects"
+
+[connection signal="pressed" from="PauseOverlay/PauseMenu/VBoxContainer/Resume" to="PauseOverlay" method="OnResumeClick"]
+[connection signal="pressed" from="PauseOverlay/PauseMenu/VBoxContainer/Restart" to="PauseOverlay" method="OnRestartClick"]
+[connection signal="pressed" from="PauseOverlay/PauseMenu/VBoxContainer/Exit" to="PauseOverlay" method="OnExitClick"]
+[connection signal="pressed" from="VictoryOverlay/VictoryPanel/VBoxContainer/HBoxContainer2/Restart" to="VictoryOverlay" method="OnRestartClick"]
+[connection signal="pressed" from="VictoryOverlay/VictoryPanel/VBoxContainer/HBoxContainer2/Next" to="VictoryOverlay" method="OnNextClick"]

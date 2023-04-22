@@ -1,0 +1,580 @@
+[gd_scene load_steps=35 format=2]
+
+[ext_resource path="res://textures/tiles/LevelTilemap.tres" type="TileSet" id=1]
+[ext_resource path="res://audio/effects/AOTS_fail-range.ogg" type="AudioStream" id=2]
+[ext_resource path="res://textures/characters/dead_shrimp.png" type="Texture" id=3]
+[ext_resource path="res://textures/characters/live_shrimp.png" type="Texture" id=4]
+[ext_resource path="res://textures/characters/blue_fish.png" type="Texture" id=5]
+[ext_resource path="res://textures/characters/dead_blue_fish.png" type="Texture" id=6]
+[ext_resource path="res://textures/characters/long_anubis.png" type="Texture" id=7]
+[ext_resource path="res://textures/characters/red_betta.png" type="Texture" id=8]
+[ext_resource path="res://src/level/LevelControl.cs" type="Script" id=9]
+[ext_resource path="res://src/level/TileMapControl.cs" type="Script" id=10]
+[ext_resource path="res://src/level/MidPlaneControl.cs" type="Script" id=11]
+[ext_resource path="res://audio/effects/inflate.ogg" type="AudioStream" id=12]
+[ext_resource path="res://src/level/KillplaneControl.cs" type="Script" id=13]
+[ext_resource path="res://textures/tiles/midplane-shadow.png" type="Texture" id=14]
+[ext_resource path="res://audio/music/shmoo_eater.ogg" type="AudioStream" id=15]
+[ext_resource path="res://textures/characters/blue_betta.png" type="Texture" id=16]
+[ext_resource path="res://textures/characters/yellow_betta.png" type="Texture" id=17]
+[ext_resource path="res://textures/characters/dead_betta.png" type="Texture" id=18]
+[ext_resource path="res://src/level/FishControl.cs" type="Script" id=19]
+[ext_resource path="res://textures/tiles/frontplane-shadow.png" type="Texture" id=20]
+[ext_resource path="res://scenes/LevelHeater.tscn" type="PackedScene" id=21]
+[ext_resource path="res://scenes/LevelBubbler.tscn" type="PackedScene" id=22]
+[ext_resource path="res://scenes/LevelCamera.tscn" type="PackedScene" id=23]
+[ext_resource path="res://scenes/prefabs/SnailLevel.tscn" type="PackedScene" id=24]
+[ext_resource path="res://scenes/prefabs/Chest.tscn" type="PackedScene" id=25]
+[ext_resource path="res://src/ShmooHolderControl.cs" type="Script" id=26]
+[ext_resource path="res://scenes/LevelCanvas.tscn" type="PackedScene" id=27]
+[ext_resource path="res://scenes/Pushplant.tscn" type="PackedScene" id=28]
+[ext_resource path="res://scenes/prefabs/Shmoo1.tscn" type="PackedScene" id=29]
+[ext_resource path="res://scenes/prefabs/Shmoo3.tscn" type="PackedScene" id=32]
+[ext_resource path="res://scenes/prefabs/Shmoo2.tscn" type="PackedScene" id=36]
+
+[sub_resource type="RectangleShape2D" id=16]
+extents = Vector2( 5666, 78.5 )
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0.562319 )
+colors = PoolColorArray( 0.107571, 0.729416, 0.802734, 1 )
+
+[sub_resource type="GradientTexture2D" id=2]
+gradient = SubResource( 1 )
+fill_to = Vector2( 0.466667, 0 )
+
+[node name="Level" type="Node2D"]
+script = ExtResource( 9 )
+snailPath = NodePath("World/Snail")
+hudPath = NodePath("CanvasLayer/HUD")
+victoryMenuPath = NodePath("CanvasLayer/VictoryOverlay")
+heaterPath = NodePath("World/Scenery/Heater")
+levelIndex = 1
+soundPlayerPath = NodePath("SoundPlayer")
+fishDieSound = ExtResource( 2 )
+bettaFishPath = [ NodePath("World/Fish/Bettas/BlueBetta"), NodePath("World/Fish/Bettas/RedBetta"), NodePath("World/Fish/Bettas/YellowBetta") ]
+shrimpPath = NodePath("World/Fish/Shrimp/Shrimp")
+blueFishPath = NodePath("World/Fish/Bluefish/Bluefish")
+
+[node name="SoundPlayer" type="AudioStreamPlayer" parent="."]
+bus = "Effects"
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 15 )
+autoplay = true
+bus = "Music"
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Background" type="Node2D" parent="World"]
+
+[node name="MidPlaneShadow" type="Node2D" parent="World/Background"]
+position = Vector2( 38, -148 )
+script = ExtResource( 11 )
+cameraPath = NodePath("../../Camera2D")
+offset = Vector2( 0, 100 )
+
+[node name="Sprite" type="Sprite" parent="World/Background/MidPlaneShadow"]
+z_index = -2
+texture = ExtResource( 14 )
+
+[node name="FrontPlaneShadow" type="Node2D" parent="World/Background"]
+position = Vector2( 38, -148 )
+scale = 0.55
+script = ExtResource( 11 )
+cameraPath = NodePath("../../Camera2D")
+scale = 0.55
+offset = Vector2( 0, 100 )
+
+[node name="Sprite" type="Sprite" parent="World/Background/FrontPlaneShadow"]
+z_index = -2
+texture = ExtResource( 20 )
+
+[node name="Backscreen" type="Node2D" parent="World/Background"]
+z_index = -2
+
+[node name="BackScreen" type="Control" parent="World/Background/Backscreen"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="BackScreen" type="ColorRect" parent="World/Background/Backscreen/BackScreen"]
+margin_left = -3443.0
+margin_top = -2783.0
+margin_right = -1412.0
+margin_bottom = 2089.0
+color = Color( 0.294118, 0.294118, 0.294118, 1 )
+
+[node name="BackScreen3" type="ColorRect" parent="World/Background/Backscreen/BackScreen"]
+margin_left = -2124.0
+margin_top = -3698.0
+margin_right = 1793.0
+margin_bottom = -1632.0
+color = Color( 0.294118, 0.294118, 0.294118, 1 )
+
+[node name="BackScreen4" type="ColorRect" parent="World/Background/Backscreen/BackScreen"]
+margin_left = -1966.0
+margin_top = 261.0
+margin_right = 2158.0
+margin_bottom = 2001.0
+color = Color( 0.294118, 0.294118, 0.294118, 1 )
+
+[node name="BackScreen2" type="ColorRect" parent="World/Background/Backscreen/BackScreen"]
+margin_left = 1351.0
+margin_top = -2987.0
+margin_right = 3392.0
+margin_bottom = 1885.0
+color = Color( 0.294118, 0.294118, 0.294118, 1 )
+
+[node name="Killplane" type="Area2D" parent="World/Background"]
+script = ExtResource( 13 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Background/Killplane"]
+position = Vector2( -311, 330 )
+shape = SubResource( 16 )
+
+[node name="Camera2D" parent="World" instance=ExtResource( 23 )]
+visible = false
+
+[node name="MainTileMap" type="TileMap" parent="World"]
+tile_set = ExtResource( 1 )
+collision_layer = 3
+collision_mask = 3
+format = 1
+tile_data = PoolIntArray( -1703959, 18, 65536, -1703958, 18, 131073, -1769452, 18, 131073, -1769451, 18, 65538, -1638423, 18, 65536, -1703915, 18, 65538, -1572887, 18, 65536, -1638379, 18, 65538, -1507351, 18, 65536, -1572843, 18, 65538, -1441815, 18, 65536, -1441798, 28, 0, -1441797, 28, 1, -1441796, 28, 2, -1507307, 18, 65538, -1376279, 18, 65536, -1376267, 28, 0, -1376266, 28, 1, -1376265, 28, 2, -1441774, 24, 0, -1441773, 24, 0, -1441772, 24, 0, -1441771, 18, 65538, -1310743, 18, 65536, -1310738, 28, 0, -1310737, 28, 1, -1310736, 28, 1, -1310735, 28, 1, -1310734, 28, 2, -1376239, 27, 0, -1376238, 20, 0, -1376237, 17, 1, -1376236, 17, 1, -1376235, 18, 65538, -1245207, 18, 65536, -1310719, 28, 0, -1310718, 28, 1, -1310717, 28, 2, -1310703, 27, 0, -1310702, 17, 65536, -1310701, 17, 65537, -1310700, 17, 65537, -1310699, 18, 65538, -1179671, 18, 65536, -1245167, 27, 0, -1245166, 20, 65536, -1245165, 17, 131073, -1245164, 19, 65536, -1245163, 18, 65538, -1114135, 18, 65536, -1179643, 24, 0, -1179642, 24, 0, -1179628, 17, 65536, -1179627, 18, 65538, -1048599, 18, 65536, -1114108, 27, 0, -1114107, 20, 0, -1114106, 20, 1, -1114105, 25, 0, -1114095, 27, 0, -1114094, 20, 0, -1114093, 17, 1, -1114092, 19, 0, -1114091, 18, 65538, -983063, 18, 65536, -983062, 17, 1, -983061, 17, 1, -983060, 17, 1, -983059, 20, 1, -983050, 28, 0, -983049, 28, 1, -983048, 28, 2, -983044, 28, 0, -983043, 28, 2, -1048571, 17, 131072, -1048570, 17, 131074, -1048564, 24, 0, -1048563, 24, 0, -1048559, 27, 0, -1048558, 17, 65536, -1048557, 17, 65537, -1048556, 17, 65537, -1048555, 18, 65538, -917527, 18, 65536, -917526, 17, 65537, -917525, 17, 65537, -917524, 17, 65537, -917523, 17, 65538, -983040, 28, 0, -983039, 28, 2, -983029, 27, 0, -983028, 20, 0, -983027, 20, 1, -983026, 25, 0, -983023, 27, 0, -983022, 17, 65536, -983021, 17, 65537, -983020, 17, 65537, -983019, 18, 65538, -851991, 18, 65536, -851990, 17, 65537, -851989, 17, 65537, -851988, 17, 65537, -851987, 17, 65538, -917492, 17, 131072, -917491, 17, 131074, -917487, 27, 0, -917486, 17, 65536, -917485, 17, 65537, -917484, 17, 65537, -917483, 18, 65538, -786455, 18, 65536, -786454, 17, 65537, -786453, 17, 65537, -786452, 17, 65537, -786451, 17, 65538, -851951, 27, 0, -851950, 17, 65536, -851949, 17, 65537, -851948, 17, 65537, -851947, 18, 65538, -720919, 18, 65536, -720918, 17, 65537, -720917, 17, 65537, -720916, 17, 65537, -720915, 17, 65538, -720911, 28, 0, -720910, 28, 1, -720909, 28, 2, -786423, 24, 0, -786422, 24, 0, -786421, 24, 0, -786420, 24, 0, -786419, 24, 0, -786418, 24, 0, -786417, 24, 0, -786416, 24, 0, -786415, 24, 0, -786414, 17, 65536, -786413, 17, 65537, -786412, 17, 65537, -786411, 18, 65538, -655383, 18, 65536, -655382, 17, 65537, -655381, 17, 65537, -655380, 17, 65537, -655379, 17, 65538, -720888, 27, 0, -720887, 20, 0, -720886, 17, 1, -720885, 17, 1, -720884, 17, 1, -720883, 17, 1, -720882, 17, 1, -720881, 17, 1, -720880, 17, 1, -720879, 17, 1, -720878, 19, 0, -720877, 17, 65537, -720876, 17, 65537, -720875, 18, 65538, -589847, 18, 65536, -589846, 17, 65537, -589845, 17, 65537, -589844, 17, 65537, -589843, 17, 65538, -655352, 27, 0, -655351, 17, 65536, -655350, 17, 65537, -655349, 17, 65537, -655348, 17, 65537, -655347, 17, 65537, -655346, 17, 65537, -655345, 17, 65537, -655344, 17, 65537, -655343, 17, 65537, -655342, 17, 65537, -655341, 17, 65537, -655340, 17, 65537, -655339, 18, 65538, -524311, 18, 65536, -524310, 17, 65537, -524309, 17, 65537, -524308, 17, 65537, -524307, 17, 65538, -589816, 27, 0, -589815, 17, 65536, -589814, 17, 65537, -589813, 17, 65537, -589812, 17, 65537, -589811, 17, 65537, -589810, 17, 65537, -589809, 17, 65537, -589808, 17, 65537, -589807, 17, 65537, -589806, 17, 65537, -589805, 17, 65537, -589804, 17, 65537, -589803, 18, 65538, -458775, 18, 65536, -458774, 17, 65537, -458773, 17, 65537, -458772, 17, 65537, -458771, 17, 65538, -458770, 24, 0, -458769, 24, 0, -458768, 24, 0, -458757, 0, 0, -458754, 0, 0, -458753, 0, 0, -524288, 0, 0, -524287, 0, 0, -524286, 0, 0, -524285, 0, 0, -524284, 0, 0, -524283, 0, 0, -524280, 27, 0, -524279, 17, 65536, -524278, 17, 65537, -524277, 17, 65537, -524276, 17, 65537, -524275, 17, 65537, -524274, 17, 65537, -524273, 17, 65537, -524272, 17, 65537, -524271, 17, 65537, -524270, 17, 65537, -524269, 17, 65537, -524268, 17, 65537, -524267, 18, 65538, -393239, 18, 65536, -393238, 17, 65537, -393237, 17, 65537, -393236, 17, 65537, -393235, 19, 1, -393234, 17, 1, -393233, 17, 1, -393232, 20, 1, -393231, 25, 0, -393221, 0, 0, -393220, 20, 0, -393219, 17, 1, -393218, 17, 1, -393217, 17, 1, -458752, 17, 1, -458751, 17, 1, -458750, 17, 1, -458749, 20, 1, -458745, 0, 65543, -458744, 27, 0, -458743, 17, 65536, -458742, 17, 65537, -458741, 17, 65537, -458740, 17, 65537, -458739, 17, 65537, -458738, 17, 65537, -458737, 17, 65537, -458736, 17, 65537, -458735, 17, 65537, -458734, 17, 65537, -458733, 17, 65537, -458732, 17, 65537, -458731, 18, 65538, -327703, 18, 65536, -327702, 19, 65537, -327701, 17, 131073, -327700, 17, 131073, -327699, 17, 131073, -327698, 17, 131073, -327697, 17, 131073, -327696, 20, 65537, -327695, 25, 0, -327685, 0, 0, -327684, 17, 65536, -327683, 17, 65537, -327682, 19, 65537, -327681, 17, 131073, -393216, 17, 131073, -393215, 17, 131073, -393214, 17, 131073, -393213, 20, 65537, -393208, 27, 0, -393207, 17, 65536, -393206, 17, 65537, -393205, 17, 65537, -393204, 17, 65537, -393203, 17, 65537, -393202, 17, 65537, -393201, 17, 65537, -393200, 17, 65537, -393199, 17, 65537, -393198, 17, 65537, -393197, 17, 65537, -393196, 17, 65537, -393195, 18, 65538, -262167, 18, 65536, -262166, 17, 65538, -262165, 25, 0, -262164, 26, 0, -262163, 26, 0, -262162, 26, 0, -262161, 26, 0, -262160, 26, 0, -262149, 0, 0, -262148, 17, 65536, -262147, 19, 65537, -262146, 17, 131074, -327672, 27, 0, -327671, 17, 65536, -327670, 17, 65537, -327669, 17, 65537, -327668, 17, 65537, -327667, 17, 65537, -327666, 17, 65537, -327665, 17, 65537, -327664, 17, 65537, -327663, 17, 65537, -327662, 17, 65537, -327661, 17, 65537, -327660, 17, 65537, -327659, 18, 65538, -196631, 18, 65536, -196630, 17, 65538, -196629, 25, 0, -196612, 20, 65536, -196611, 17, 131074, -262143, 0, 6, -262142, 0, 6, -262136, 27, 0, -262135, 17, 65536, -262134, 17, 65537, -262133, 17, 65537, -262132, 17, 65537, -262131, 17, 65537, -262130, 17, 65537, -262129, 17, 65537, -262128, 17, 65537, -262127, 17, 65537, -262126, 17, 65537, -262125, 17, 65537, -262124, 17, 65537, -262123, 18, 65538, -131095, 18, 65536, -131094, 17, 65538, -131093, 25, 0, -131074, 18, 65537, -131073, 18, 65537, -196600, 27, 0, -196599, 17, 65536, -196598, 17, 65537, -196597, 17, 65537, -196596, 17, 65537, -196595, 17, 65537, -196594, 17, 65537, -196593, 17, 65537, -196592, 17, 65537, -196591, 17, 65537, -196590, 17, 65537, -196589, 17, 65537, -196588, 17, 65537, -196587, 18, 65538, -65559, 18, 65536, -65558, 17, 65538, -65557, 25, 0, -65541, 0, 0, -131067, 0, 65537, -131066, 0, 2, -131064, 27, 0, -131063, 17, 65536, -131062, 17, 65537, -131061, 17, 65537, -131060, 17, 65537, -131059, 17, 65537, -131058, 17, 65537, -131057, 17, 65537, -131056, 17, 65537, -131055, 17, 65537, -131054, 17, 65537, -131053, 17, 65537, -131052, 17, 65537, -131051, 18, 65538, -23, 18, 65536, -22, 17, 65538, -21, 25, 0, -5, 0, 0, -65528, 27, 0, -65527, 17, 65536, -65526, 17, 65537, -65525, 17, 65537, -65524, 17, 65537, -65523, 17, 65537, -65522, 17, 65537, -65521, 17, 65537, -65520, 17, 65537, -65519, 17, 65537, -65518, 17, 65537, -65517, 17, 65537, -65516, 17, 65537, -65515, 18, 65538, 65513, 18, 65536, 65514, 17, 65538, 65515, 25, 0, 65531, 0, 0, 65534, 28, 0, 65535, 28, 1, 0, 28, 1, 1, 28, 2, 8, 27, 0, 9, 17, 65536, 10, 17, 65537, 11, 17, 65537, 12, 17, 65537, 13, 17, 65537, 14, 17, 65537, 15, 17, 65537, 16, 17, 65537, 17, 17, 65537, 18, 17, 65537, 19, 17, 65537, 20, 17, 65537, 21, 18, 65538, 131049, 18, 65536, 131050, 17, 65538, 131051, 25, 0, 131053, 24, 0, 131054, 24, 0, 131055, 24, 0, 131056, 24, 0, 131057, 24, 0, 131058, 24, 0, 131059, 24, 0, 131060, 24, 0, 131061, 24, 0, 131062, 24, 0, 131063, 24, 0, 131064, 24, 0, 131065, 24, 0, 131066, 24, 0, 131067, 24, 0, 131068, 24, 0, 131069, 24, 0, 131070, 24, 0, 131071, 24, 0, 65536, 24, 0, 65537, 24, 0, 65538, 24, 0, 65539, 24, 0, 65540, 24, 0, 65541, 24, 0, 65542, 24, 0, 65543, 24, 0, 65544, 24, 0, 65545, 17, 65536, 65546, 17, 65537, 65547, 17, 65537, 65548, 17, 65537, 65549, 17, 65537, 65550, 17, 65537, 65551, 17, 65537, 65552, 17, 65537, 65553, 17, 65537, 65554, 17, 65537, 65555, 17, 65537, 65556, 17, 65537, 65557, 18, 65538, 196585, 18, 65536, 196586, 19, 1, 196587, 17, 1, 196588, 17, 1, 196589, 17, 1, 196590, 17, 1, 196591, 17, 1, 196592, 17, 1, 196593, 17, 1, 196594, 17, 1, 196595, 17, 1, 196596, 17, 1, 196597, 17, 1, 196598, 17, 1, 196599, 17, 1, 196600, 17, 1, 196601, 17, 1, 196602, 17, 1, 196603, 17, 1, 196604, 17, 1, 196605, 17, 1, 196606, 17, 1, 196607, 17, 1, 131072, 17, 1, 131073, 17, 1, 131074, 17, 1, 131075, 17, 1, 131076, 17, 1, 131077, 17, 1, 131078, 17, 1, 131079, 17, 1, 131080, 17, 1, 131081, 19, 0, 131082, 17, 65537, 131083, 17, 65537, 131084, 17, 65537, 131085, 17, 65537, 131086, 17, 65537, 131087, 17, 65537, 131088, 17, 65537, 131089, 17, 65537, 131090, 17, 65537, 131091, 17, 65537, 131092, 17, 65537, 131093, 18, 65538, 262121, 18, 65536, 262122, 17, 65537, 262123, 17, 65537, 262124, 17, 65537, 262125, 17, 65537, 262126, 17, 65537, 262127, 17, 65537, 262128, 17, 65537, 262129, 17, 65537, 262130, 17, 65537, 262131, 17, 65537, 262132, 17, 65537, 262133, 17, 65537, 262134, 17, 65537, 262135, 17, 65537, 262136, 17, 65537, 262137, 17, 65537, 262138, 17, 65537, 262139, 17, 65537, 262140, 17, 65537, 262141, 17, 65537, 262142, 17, 65537, 262143, 17, 65537, 196608, 17, 65537, 196609, 17, 65537, 196610, 17, 65537, 196611, 17, 65537, 196612, 17, 65537, 196613, 17, 65537, 196614, 17, 65537, 196615, 17, 65537, 196616, 17, 65537, 196617, 17, 65537, 196618, 17, 65537, 196619, 17, 65537, 196620, 17, 65537, 196621, 17, 65537, 196622, 17, 65537, 196623, 17, 65537, 196624, 17, 65537, 196625, 17, 65537, 196626, 17, 65537, 196627, 17, 65537, 196628, 17, 65537, 196629, 18, 65538, 327657, 18, 131072, 327658, 18, 131073, 327659, 18, 131073, 327660, 18, 131073, 327661, 18, 131073, 327662, 18, 131073, 327663, 18, 131073, 327664, 18, 131073, 327665, 18, 131073, 327666, 18, 131073, 327667, 18, 131073, 327668, 18, 131073, 327669, 18, 131073, 327670, 18, 131073, 327671, 18, 131073, 327672, 18, 131073, 327673, 18, 131073, 327674, 18, 131073, 327675, 18, 131073, 327676, 18, 131073, 327677, 18, 131073, 327678, 18, 131073, 327679, 18, 131073, 262144, 18, 131073, 262145, 18, 131073, 262146, 18, 131073, 262147, 18, 131073, 262148, 18, 131073, 262149, 18, 131073, 262150, 18, 131073, 262151, 18, 131073, 262152, 18, 131073, 262153, 18, 131073, 262154, 18, 131073, 262155, 18, 131073, 262156, 18, 131073, 262157, 18, 131073, 262158, 18, 131073, 262159, 18, 131073, 262160, 18, 131073, 262161, 18, 131073, 262162, 18, 131073, 262163, 18, 131073, 262164, 18, 131073, 262165, 18, 131074 )
+script = ExtResource( 10 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Snail" parent="World" instance=ExtResource( 24 )]
+position = Vector2( 12, -473 )
+z_index = -1
+inflateSound = ExtResource( 12 )
+
+[node name="ShmooHolder" type="Node2D" parent="World"]
+script = ExtResource( 26 )
+mainTileMapPath = NodePath("../MainTileMap")
+_shmooPrefabs = [ ExtResource( 29 ), ExtResource( 36 ), ExtResource( 32 ) ]
+
+[node name="Shmoo1" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( -368.991, -1472.48 )
+
+[node name="Shmoo2" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -327.114, -1472.25 )
+
+[node name="Shmoo3" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -276.473, -1471.95 )
+
+[node name="Shmoo4" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -248.482, -1471.99 )
+
+[node name="Shmoo5" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -233.906, -1471.23 )
+
+[node name="Shmoo6" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -208.546, -1471.88 )
+
+[node name="Shmoo7" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( -660.594, -1407.24 )
+
+[node name="Shmoo8" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -648.286, -1407.51 )
+
+[node name="Shmoo9" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -631.143, -1407.41 )
+
+[node name="Shmoo10" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( -608.629, -1408.99 )
+
+[node name="Shmoo11" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -595.856, -1408.37 )
+
+[node name="Shmoo12" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -555.203, -1408.61 )
+
+[node name="Shmoo13" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -540.786, -1407.92 )
+
+[node name="Shmoo14" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -1136.16, -1343.5 )
+
+[node name="Shmoo15" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -1067.2, -1344.23 )
+
+[node name="Shmoo16" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( -1044.04, -1343.72 )
+
+[node name="Shmoo17" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -991.24, -1343.33 )
+
+[node name="Shmoo18" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -980.234, -1344.24 )
+
+[node name="Shmoo19" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -916.354, -1343.7 )
+
+[node name="Shmoo20" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -861.787, -1343.37 )
+
+[node name="Shmoo21" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( -848.883, -1344.94 )
+
+[node name="Shmoo22" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( 80.087, -1280.03 )
+
+[node name="Shmoo23" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( 93.8992, -1280.48 )
+
+[node name="Shmoo24" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( 119.744, -1280.24 )
+
+[node name="Shmoo25" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( 147.431, -1279.69 )
+
+[node name="Shmoo26" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( 172.738, -1280.44 )
+
+[node name="Shmoo27" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( 184.977, -1279.45 )
+
+[node name="Shmoo28" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( 239.201, -1279.8 )
+
+[node name="Shmoo32" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -1388.28, -1023.36 )
+
+[node name="Shmoo33" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -1375.16, -1023.44 )
+
+[node name="Shmoo34" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -1364.68, -1024.53 )
+
+[node name="Shmoo35" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -1336.48, -1024.53 )
+
+[node name="Shmoo36" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -1288.53, -1024.96 )
+
+[node name="Shmoo37" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -1260.79, -1024.53 )
+
+[node name="Shmoo38" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -1247.7, -1024.89 )
+
+[node name="Shmoo39" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( -1236.13, -1023.1 )
+
+[node name="Shmoo40" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -1195.29, -1024.84 )
+
+[node name="Shmoo41" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -1184.53, -1024.34 )
+
+[node name="Shmoo42" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( -610.962, -1023.48 )
+
+[node name="Shmoo43" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -583.954, -1024.31 )
+
+[node name="Shmoo44" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -543.896, -1023.38 )
+
+[node name="Shmoo45" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -520.599, -1023.32 )
+
+[node name="Shmoo46" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -504.533, -1023.31 )
+
+[node name="Shmoo47" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -490.748, -1024.01 )
+
+[node name="Shmoo48" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -464.356, -1023.13 )
+
+[node name="Shmoo53" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( 42, -958 )
+
+[node name="Shmoo54" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( 29.5445, -959.31 )
+
+[node name="Shmoo55" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( 56.0681, -959.341 )
+
+[node name="Shmoo56" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( 71.3555, -960.4 )
+
+[node name="Shmoo57" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( 84.5858, -960.78 )
+
+[node name="Shmoo58" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -931.576, -768.437 )
+
+[node name="Shmoo59" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -904.632, -767.538 )
+
+[node name="Shmoo60" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -888.152, -768.953 )
+
+[node name="Shmoo61" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -875.16, -767.156 )
+
+[node name="Shmoo62" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -823.614, -767.418 )
+
+[node name="Shmoo63" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -810.068, -768.832 )
+
+[node name="Shmoo64" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( -797.081, -767.251 )
+
+[node name="Shmoo65" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( -236.86, -447.276 )
+
+[node name="Shmoo66" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -223.215, -447.115 )
+
+[node name="Shmoo67" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -211.027, -447.516 )
+
+[node name="Shmoo68" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -200.691, -447.354 )
+
+[node name="Shmoo69" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -183.909, -447.937 )
+
+[node name="Shmoo70" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( -160.844, -448.068 )
+
+[node name="Shmoo71" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -147.339, -447.352 )
+
+[node name="Shmoo72" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -108.946, -447.009 )
+
+[node name="Shmoo73" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -96.5799, -447.906 )
+
+[node name="Shmoo74" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -72.6996, -447.314 )
+
+[node name="Shmoo75" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( -55.1348, -448.31 )
+
+[node name="Shmoo76" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( -44.6334, -447.928 )
+
+[node name="Shmoo77" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -31.0985, -447.933 )
+
+[node name="Shmoo78" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -128, -450 )
+
+[node name="Shmoo79" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( 48, -448 )
+
+[node name="Shmoo80" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( 72, -449 )
+
+[node name="Shmoo81" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( 95.8481, -448.28 )
+
+[node name="Shmoo82" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( 108.074, -447.23 )
+
+[node name="Shmoo83" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( 120.397, -448.2 )
+
+[node name="Shmoo84" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( 136.643, -447.603 )
+
+[node name="Shmoo88" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -84.5989, 0.254182 )
+
+[node name="Shmoo89" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -43.8953, 0.968133 )
+
+[node name="Shmoo90" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( -19.2411, -0.239202 )
+
+[node name="Shmoo91" parent="World/ShmooHolder" instance=ExtResource( 36 )]
+position = Vector2( -7.17999, 0.0266807 )
+
+[node name="Shmoo92" parent="World/ShmooHolder" instance=ExtResource( 32 )]
+position = Vector2( 32.7057, 0.737015 )
+
+[node name="Shmoo93" parent="World/ShmooHolder" instance=ExtResource( 29 )]
+position = Vector2( 56.4521, -0.772917 )
+
+[node name="Scenery" type="Node2D" parent="World"]
+
+[node name="Water" type="Sprite" parent="World/Scenery"]
+position = Vector2( -30.9992, -698 )
+scale = Vector2( 43.125, 29.1562 )
+z_index = -10
+texture = SubResource( 2 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Bubbler" parent="World/Scenery" instance=ExtResource( 22 )]
+position = Vector2( -857, 117 )
+
+[node name="Bubbler2" parent="World/Scenery" instance=ExtResource( 22 )]
+position = Vector2( -301, 117 )
+
+[node name="Bubbler3" parent="World/Scenery" instance=ExtResource( 22 )]
+position = Vector2( 202, -455 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Bubbler4" parent="World/Scenery" instance=ExtResource( 22 )]
+position = Vector2( 384, -1091 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Bubbler5" parent="World/Scenery" instance=ExtResource( 22 )]
+position = Vector2( 832, -958 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Bubbler6" parent="World/Scenery" instance=ExtResource( 22 )]
+position = Vector2( -194, -1026 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="LongAnubis" type="Sprite" parent="World/Scenery"]
+visible = false
+position = Vector2( 575, -189 )
+texture = ExtResource( 7 )
+
+[node name="Chest" parent="World/Scenery" instance=ExtResource( 25 )]
+position = Vector2( -1264, 111 )
+__meta__ = {
+"_edit_lock_": true
+}
+hatId = 2
+
+[node name="Chest2" parent="World/Scenery" instance=ExtResource( 25 )]
+position = Vector2( 1225, -1106 )
+__meta__ = {
+"_edit_lock_": true
+}
+hatId = 4
+
+[node name="Heater" parent="World/Scenery" instance=ExtResource( 21 )]
+position = Vector2( 359, -774 )
+
+[node name="Pushplant" parent="World/Scenery" instance=ExtResource( 28 )]
+visible = false
+
+[node name="Pushplant2" parent="World/Scenery" instance=ExtResource( 28 )]
+visible = false
+position = Vector2( 55, -310 )
+
+[node name="Pushplant3" parent="World/Scenery" instance=ExtResource( 28 )]
+visible = false
+position = Vector2( 1212, -118 )
+
+[node name="Fish" type="Node2D" parent="World"]
+visible = false
+
+[node name="Bettas" type="Node2D" parent="World/Fish"]
+
+[node name="BlueBetta" type="Sprite" parent="World/Fish/Bettas"]
+position = Vector2( -801, -27 )
+texture = ExtResource( 16 )
+script = ExtResource( 19 )
+deadFish = ExtResource( 18 )
+waypointPaths = [ NodePath("../WP1"), NodePath("../WP2"), NodePath("../WP3"), NodePath("../WP4"), NodePath("../WP5") ]
+
+[node name="RedBetta" type="Sprite" parent="World/Fish/Bettas"]
+position = Vector2( -545, -87 )
+texture = ExtResource( 8 )
+script = ExtResource( 19 )
+deadFish = ExtResource( 18 )
+waypointPaths = [ NodePath("../WP1"), NodePath("../WP2"), NodePath("../WP3"), NodePath("../WP4"), NodePath("../WP5") ]
+
+[node name="YellowBetta" type="Sprite" parent="World/Fish/Bettas"]
+position = Vector2( -467, 8 )
+texture = ExtResource( 17 )
+script = ExtResource( 19 )
+deadFish = ExtResource( 18 )
+waypointPaths = [ NodePath("../WP1"), NodePath("../WP2"), NodePath("../WP3"), NodePath("../WP4"), NodePath("../WP5") ]
+
+[node name="WP1" type="Position2D" parent="World/Fish/Bettas"]
+position = Vector2( -785, -61 )
+
+[node name="WP4" type="Position2D" parent="World/Fish/Bettas"]
+position = Vector2( -317, -18 )
+
+[node name="WP5" type="Position2D" parent="World/Fish/Bettas"]
+position = Vector2( -615, -131 )
+
+[node name="WP2" type="Position2D" parent="World/Fish/Bettas"]
+position = Vector2( -421, -59 )
+
+[node name="WP3" type="Position2D" parent="World/Fish/Bettas"]
+position = Vector2( -600, 25 )
+
+[node name="Shrimp" type="Node2D" parent="World/Fish"]
+
+[node name="Shrimp" type="Sprite" parent="World/Fish/Shrimp"]
+position = Vector2( -146, -580 )
+texture = ExtResource( 4 )
+script = ExtResource( 19 )
+deadFish = ExtResource( 3 )
+waypointPaths = [ NodePath("../WP1"), NodePath("../WP2"), NodePath("../WP3"), NodePath("../WP4"), NodePath("../WP5"), NodePath("../WP6") ]
+
+[node name="WP1" type="Position2D" parent="World/Fish/Shrimp"]
+position = Vector2( -165, -694 )
+
+[node name="WP2" type="Position2D" parent="World/Fish/Shrimp"]
+position = Vector2( -162, -567 )
+
+[node name="WP3" type="Position2D" parent="World/Fish/Shrimp"]
+position = Vector2( 55, -530 )
+
+[node name="WP4" type="Position2D" parent="World/Fish/Shrimp"]
+position = Vector2( 90, -650 )
+
+[node name="WP5" type="Position2D" parent="World/Fish/Shrimp"]
+position = Vector2( -23, -653 )
+
+[node name="WP6" type="Position2D" parent="World/Fish/Shrimp"]
+position = Vector2( -46, -513 )
+
+[node name="Bluefish" type="Node2D" parent="World/Fish"]
+
+[node name="Bluefish" type="Sprite" parent="World/Fish/Bluefish"]
+position = Vector2( 576, -427 )
+texture = ExtResource( 5 )
+script = ExtResource( 19 )
+deadFish = ExtResource( 6 )
+waypointPaths = [ NodePath("../WP1"), NodePath("../WP2"), NodePath("../WP3"), NodePath("../WP4"), NodePath("../WP5"), NodePath("../WP6") ]
+
+[node name="WP1" type="Position2D" parent="World/Fish/Bluefish"]
+position = Vector2( 440, -512 )
+
+[node name="WP2" type="Position2D" parent="World/Fish/Bluefish"]
+position = Vector2( 444, -352 )
+
+[node name="WP3" type="Position2D" parent="World/Fish/Bluefish"]
+position = Vector2( 767, -338 )
+
+[node name="WP4" type="Position2D" parent="World/Fish/Bluefish"]
+position = Vector2( 729, -473 )
+
+[node name="WP5" type="Position2D" parent="World/Fish/Bluefish"]
+position = Vector2( 594, -500 )
+
+[node name="WP6" type="Position2D" parent="World/Fish/Bluefish"]
+position = Vector2( 594, -410 )
+
+[node name="CanvasLayer" parent="." instance=ExtResource( 27 )]
+
+[connection signal="body_entered" from="World/Background/Killplane" to="World/Background/Killplane" method="OnBodyEntered"]
+[connection signal="ShmooCountChanged" from="World/ShmooHolder" to="." method="OnShmooCountChanged"]

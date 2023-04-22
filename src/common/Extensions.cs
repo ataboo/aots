@@ -23,4 +23,8 @@ public static class GodotExtensions {
 
         return BalanceColor.LinearInterpolate(ImbalanceColor, imbalance);
     }
+
+    public static float Imbalance(this float value, float balancePoint = 0.5f) {
+		return Mathf.Abs((value - 0.5f) * 2);
+    }
 }

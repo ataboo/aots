@@ -53,14 +53,13 @@ public class LevelControl : Node2D
 		_bettaFish = bettaFishPath.Select(p => GetNode<FishControl>(p)).ToArray();
 		_shrimp = GetNode<FishControl>(shrimpPath) ?? throw new NullReferenceException();
 		_blueFish = GetNode<FishControl>(blueFishPath) ?? throw new NullReferenceException();
-
+		_gameManager = GetNode<GameManager>("/root/GameManager") ?? throw new NullReferenceException();
+		
 		_startPosition = _snailControl.Position;
 
 		if(_state == null) {
 			InitStats();
 		}
-
-		_gameManager = GetNode<GameManager>("/root/GameManager") ?? throw new NullReferenceException();
 	}
 
 	public override void _Process(float delta)
@@ -78,15 +77,28 @@ public class LevelControl : Node2D
 		_state.shmooCount = shmooCount;
 
 		if(_state.WonGame()) {
-			if(_state.fish1.health > 0 && _state.fish2.health > 0 && _state.fish3.health > 0) {
-				switch(levelIndex) {
-					case 0:
-						OnHatUnlocked(1);
-						break;
-				}
+			var hatUnlocked = false;
+			var perfectLevelHat = VictoryHatUnlock();
+			if(perfectLevelHat >= 0) {
+				hatUnlocked = OnHatUnlocked(perfectLevelHat);
 			}
 
-			_victoryMenu.ShowVictory(_state);
+			_victoryMenu.ShowVictory(_state, hatUnlocked);
+		}
+	}
+
+	private int VictoryHatUnlock() {
+		if(_state.fish1.health == 0 || _state.fish1.health == 1 || _state.fish1.health == 2) {
+			return -1;
+		}
+
+		switch(levelIndex) {
+			case 0:
+				return 1;
+			case 1:
+				return 3;
+			default:
+				return -1;
 		}
 	}
 
@@ -114,6 +126,8 @@ public class LevelControl : Node2D
 			tempDamageRate = startingStats.tempDamageRate,
 			temperature = 0.5f,
 		};
+
+		_heater.SetLevelStats(startingStats);
 	}
 
 	private void UpdateStats(float delta) {
@@ -163,14 +177,17 @@ public class LevelControl : Node2D
 		}
 
 		if(_state.LostGame()) {
-			_victoryMenu.ShowVictory(_state);
+			_victoryMenu.ShowVictory(_state, false);
 		}
 	}
 
-    public void OnHatUnlocked(int hatId)
+    public bool OnHatUnlocked(int hatId)
     {
 		if(_gameManager.UnlockHat(hatId)) {
 			_hudControl.ShowHatUnlock(hatId);
+			return true;
 		}
+
+		return false;
     }
 }

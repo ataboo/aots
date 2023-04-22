@@ -27,16 +27,21 @@ public class GameManager : Node2D
                 false, // Beret
                 false, // Cowboy
             },
+            level2Unlocked = false,
         };
     }
 
     public void LoadLevel(int levelIdx) {
+        if(levelIdx == 1) {
+            _gameState.level2Unlocked = true;
+        } 
         var nextScene = levels[levelIdx];
         GetTree().ChangeSceneTo(nextScene);
     }
 
     public void LoadEnd() {
-        GetTree().ChangeSceneTo(endScene);
+        GetTree().ChangeSceneTo(mainMenuScene);
+        GetNode<Control>("/root/MainMenu/Credits").Visible = true;
     }
 
     public void LoadMainMenu() {

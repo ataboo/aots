@@ -8,14 +8,16 @@ public class TileMapControl : TileMap
 
     private TileSetControl _tileSetControl => TileSet as TileSetControl;
 
-    private RandomNumberGenerator _rng = new RandomNumberGenerator();
+    private static RandomNumberGenerator _rng = new RandomNumberGenerator();
 
     public override void _Ready()
     {
     }
 
-    public bool PositionIsSpike(Vector2 position) {
-        var tileId = GetCellv(WorldToMap(position));
+    public bool PositionIsSpike(Vector2 position, Vector2 colNormal) {
+        var halfCell = position - (colNormal *32);
+        var mapPos = WorldToMap(halfCell);
+        var tileId = GetCellv(mapPos);
         if(tileId < 0) {
             return false;
         }
@@ -24,6 +26,7 @@ public class TileMapControl : TileMap
     }
 
     public Vector2[] GetShmooSpawnPoints() {
+        _rng.Randomize();
         var shmooPoints = new Vector2[]{};
 
         foreach(Vector2 mapPos in GetUsedCells()) {

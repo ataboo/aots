@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,7 +18,7 @@ public class TileSetControl : TileSet
         "spike_right",
     };
 
-    private Dictionary<AutoTileId, Vector2[]> _shmooPoints = null;
+    private Dictionary<AutoTileId, Func<Vector2[]>> _shmooPoints = null;
 
     private HashSet<int> _deathTileIds;
 
@@ -42,29 +43,30 @@ public class TileSetControl : TileSet
     }
 
     public Vector2[] LocalShmooPoints(int tileId, Vector2 autotilePos) {
+        _rng.Randomize();
         if(_shmooPoints == null || _shmooPoints.Values.Count == 0) {
             InitShmooPoints();
         }
 
         if(_shmooPoints.TryGetValue(AutoTileId.FromTileId(tileId, (int)autotilePos.x, (int)autotilePos.y), out var points)) {
-            return points;
+            return points();
         }
 
         return new Vector2[]{};
     }
 
     private void InitShmooPoints() {
-        _shmooPoints = new Dictionary<AutoTileId, Vector2[]>{
-            {AutoTileId.FromName(this, "sand_corner", 0, 0), PointsAlongLine(new Vector2(8, 0), new Vector2(56, 0), 5)},
-            {AutoTileId.FromName(this, "sand_corner", 1, 0), PointsAlongLine(new Vector2(8, 0), new Vector2(56, 0), 5)},
+        _shmooPoints = new Dictionary<AutoTileId, Func<Vector2[]>>{
+            {AutoTileId.FromName(this, "sand_corner", 0, 0), () => PointsAlongLine(new Vector2(8, 0), new Vector2(56, 0), 5)},
+            {AutoTileId.FromName(this, "sand_corner", 1, 0), () => PointsAlongLine(new Vector2(8, 0), new Vector2(56, 0), 5)},
 
-            {AutoTileId.FromName(this, "sand_pad", 0, 0), PointsAlongLine(new Vector2(16, 0), new Vector2(56, 0), 4)},
-            {AutoTileId.FromName(this, "sand_pad", 1, 0), PointsAlongLine(new Vector2(8, 0), new Vector2(56, 0), 5)},
-            {AutoTileId.FromName(this, "sand_pad", 2, 0), PointsAlongLine(new Vector2(8, 0), new Vector2(48, 0), 4)},
+            {AutoTileId.FromName(this, "sand_pad", 0, 0), () => PointsAlongLine(new Vector2(16, 0), new Vector2(56, 0), 4)},
+            {AutoTileId.FromName(this, "sand_pad", 1, 0), () => PointsAlongLine(new Vector2(8, 0), new Vector2(56, 0), 5)},
+            {AutoTileId.FromName(this, "sand_pad", 2, 0), () => PointsAlongLine(new Vector2(8, 0), new Vector2(48, 0), 4)},
 
-            {AutoTileId.FromName(this, "sand_flat", 0, 0), PointsAlongLine(new Vector2(8, 56), new Vector2(56, 0), 6)},
-            {AutoTileId.FromName(this, "sand_flat", 1, 0), PointsAlongLine(new Vector2(8, 0), new Vector2(56, 0), 5)},
-            {AutoTileId.FromName(this, "sand_flat", 2, 0), PointsAlongLine(new Vector2(8, 0), new Vector2(56, 56), 6)},
+            {AutoTileId.FromName(this, "sand_flat", 0, 0), () => PointsAlongLine(new Vector2(8, 56), new Vector2(56, 0), 6)},
+            {AutoTileId.FromName(this, "sand_flat", 1, 0), () => PointsAlongLine(new Vector2(8, 0), new Vector2(56, 0), 5)},
+            {AutoTileId.FromName(this, "sand_flat", 2, 0), () => PointsAlongLine(new Vector2(8, 0), new Vector2(56, 56), 6)},
         };
     }
 

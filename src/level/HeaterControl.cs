@@ -26,9 +26,8 @@ public class HeaterControl : Node2D
 
     public float DialLevel() => _dialControl?.Level() ?? 0.5f;
 
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
+    public void SetLevelStats(StartingLevelStats startingStats)
+    {
+        _dialControl.SetLevelStats(startingStats);
+    }
 }
